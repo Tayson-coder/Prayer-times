@@ -17,10 +17,14 @@ object AzanAudio {
         class FilePath(val file: File) : Source("ملف مختار")
         class Url(val url: String) : Source("رابط")
         class Raw(val resId: Int) : Source("مدمج في التطبيق")
+        class Online(val url: String) : Source("من الإنترنت")
         class Fallback(val uri: Uri) : Source("نغمة المنبّه (بديل)")
     }
 
     fun userFile(ctx: Context, id: String) = File(File(ctx.filesDir, "azan"), id)
+
+    fun isDownloadable(ctx: Context, id: String): Boolean =
+        muezzinById(id).let { it.id == id && it.url != null } && describe(ctx, id) == null
 
     @SuppressLint("DiscouragedApi")
     fun rawId(ctx: Context, id: String): Int = ctx.resources.getIdentifier(id, "raw", ctx.packageName)
@@ -30,6 +34,8 @@ object AzanAudio {
         AppSettings(ctx).customUrl(id)?.let { add(Source.Url(it)) }
         rawId(ctx, id).takeIf { it != 0 }?.let { add(Source.Raw(it)) }
         if (includeFallback) {
+            // لم يُحمَّل الملف بعد: نجرب تشغيله مباشرة من الإنترنت قبل نغمة المنبّه
+            muezzinById(id).url?.takeIf { muezzinById(id).id == id }?.let { add(Source.Online(it)) }
             (RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
                 ?: RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
                 ?.let { add(Source.Fallback(it)) }
@@ -76,6 +82,7 @@ class AzanPlayer(private val ctx: Context) {
             when (src) {
                 is AzanAudio.Source.FilePath -> mp.setDataSource(src.file.absolutePath)
                 is AzanAudio.Source.Url -> mp.setDataSource(src.url)
+                is AzanAudio.Source.Online -> mp.setDataSource(src.url)
                 is AzanAudio.Source.Raw -> ctx.resources.openRawResourceFd(src.resId).use { mp.setDataSource(it) }
                 is AzanAudio.Source.Fallback -> mp.setDataSource(ctx, src.uri)
             }

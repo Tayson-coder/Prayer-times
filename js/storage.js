@@ -8,7 +8,7 @@
     method: 'egypt',
     asr: 'standard',
     muezzin: 'abdulbasit',
-    fajrMuezzin: 'same',
+    fajrMuezzin: 'malekfajr',
     volume: 0.9,
     enabled: { fajr: true, dhuhr: true, asr: true, maghrib: true, isha: true },
     adjust: { fajr: 0, sunrise: 0, dhuhr: 0, asr: 0, maghrib: 0, isha: 0 },

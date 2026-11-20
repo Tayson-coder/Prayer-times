@@ -69,6 +69,7 @@ class MainActivity : BaseActivity() {
             ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED
         ) notifPermission.launch(Manifest.permission.POST_NOTIFICATIONS)
 
+        downloadDefaults()
         if (!settings.hasLocation) startActivity(Intent(this, SettingsActivity::class.java).putExtra(SettingsActivity.EXTRA_FIRST_RUN, true))
     }
 
@@ -100,6 +101,8 @@ class MainActivity : BaseActivity() {
                 val m = MUEZZINS[position]
                 if (m.id != settings.muezzin) {
                     settings.prefs.edit().putString(AppSettings.KEY_MUEZZIN, m.id).apply()
+                    // اختيار مؤذن جديد ← تحميل صوته تلقائياً
+                    if (AzanAudio.isDownloadable(this@MainActivity, m.id)) downloadVoice(m.id)
                 }
                 updateSource()
             }
@@ -118,12 +121,41 @@ class MainActivity : BaseActivity() {
         findViewById<Button>(R.id.manage_audio_button).setOnClickListener {
             startActivity(Intent(this, AudioActivity::class.java))
         }
+        findViewById<Button>(R.id.download_voice_button).setOnClickListener { downloadVoice(settings.muezzin) }
+    }
+
+    private fun downloadVoice(id: String) {
+        AzanDownloader.download(this, id) { ok ->
+            if (isDestroyed) return@download
+            android.widget.Toast.makeText(
+                this, if (ok) R.string.voice_downloaded else R.string.download_failed, android.widget.Toast.LENGTH_SHORT,
+            ).show()
+            updateSource()
+        }
+        updateSource()
+    }
+
+    /** أول تشغيل: تحميل صوت المؤذن الافتراضي ومؤذن الفجر في الخلفية */
+    private fun downloadDefaults() {
+        listOf(settings.muezzin, settings.muezzinFor(Prayer.FAJR)).distinct()
+            .filter { AzanAudio.isDownloadable(this, it) }
+            .forEach { id -> AzanDownloader.download(this, id) { if (!isDestroyed) updateSource() } }
     }
 
     private fun updateSource() {
-        val label = AzanAudio.describe(this, settings.muezzin)
-        findViewById<TextView>(R.id.muezzin_source).text =
-            if (label != null) getString(R.string.source_is, label) else getString(R.string.no_audio_yet)
+        val id = settings.muezzin
+        val label = AzanAudio.describe(this, id)
+        val downloading = AzanDownloader.isDownloading(id)
+        findViewById<TextView>(R.id.muezzin_source).text = when {
+            downloading -> getString(R.string.downloading)
+            label != null -> getString(R.string.source_is, label)
+            muezzinById(id).url != null -> getString(R.string.not_downloaded_yet)
+            else -> getString(R.string.no_audio_yet)
+        }
+        findViewById<Button>(R.id.download_voice_button).apply {
+            visibility = if (AzanAudio.isDownloadable(this@MainActivity, id)) View.VISIBLE else View.GONE
+            isEnabled = !downloading
+        }
     }
 
     private fun updateWarnings() {

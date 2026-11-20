@@ -30,6 +30,25 @@ class AudioActivity : BaseActivity() {
         settings = AppSettings(this)
         player = AzanPlayer(this)
         pendingId = savedInstanceState?.getString("pending")
+        findViewById<Button>(R.id.download_all).setOnClickListener { b ->
+            b.isEnabled = false
+            AzanDownloader.downloadAll(this) { done, total, failed ->
+                if (total == 0) {
+                    Toast.makeText(this, R.string.all_downloaded, Toast.LENGTH_SHORT).show()
+                } else {
+                    (b as Button).text = getString(R.string.downloading_n, done, total)
+                    if (done == total) {
+                        Toast.makeText(
+                            this,
+                            if (failed == 0) getString(R.string.download_all_ok) else getString(R.string.download_some_failed, failed),
+                            Toast.LENGTH_LONG,
+                        ).show()
+                    }
+                }
+                if (done == total) render()
+            }
+            render()
+        }
         render()
     }
 
@@ -44,6 +63,13 @@ class AudioActivity : BaseActivity() {
     }
 
     private fun render() {
+        val remaining = MUEZZINS.count { AzanAudio.isDownloadable(this, it.id) }
+        findViewById<Button>(R.id.download_all).apply {
+            if (MUEZZINS.none { AzanDownloader.isDownloading(it.id) }) {
+                isEnabled = remaining > 0
+                text = if (remaining > 0) getString(R.string.download_all, remaining) else getString(R.string.all_downloaded)
+            }
+        }
         val list = findViewById<LinearLayout>(R.id.audio_list)
         list.removeAllViews()
         for (m in MUEZZINS) {
@@ -51,9 +77,26 @@ class AudioActivity : BaseActivity() {
             row.findViewById<TextView>(R.id.m_name).text = m.name
             row.findViewById<TextView>(R.id.m_note).text = m.note
             val label = AzanAudio.describe(this, m.id)
+            val downloading = AzanDownloader.isDownloading(m.id)
             row.findViewById<TextView>(R.id.m_status).apply {
-                text = label ?: getString(R.string.no_audio)
+                text = when {
+                    downloading -> getString(R.string.downloading)
+                    label != null -> label
+                    m.url != null -> getString(R.string.available_download)
+                    else -> getString(R.string.no_audio)
+                }
                 isActivated = label != null
+            }
+            row.findViewById<Button>(R.id.m_download).apply {
+                visibility = if (AzanAudio.isDownloadable(this@AudioActivity, m.id)) Button.VISIBLE else Button.GONE
+                isEnabled = !downloading
+                setOnClickListener {
+                    AzanDownloader.download(this@AudioActivity, m.id) { ok ->
+                        Toast.makeText(this@AudioActivity, if (ok) R.string.file_saved else R.string.download_failed, Toast.LENGTH_SHORT).show()
+                        render()
+                    }
+                    render()
+                }
             }
             row.findViewById<Button>(R.id.m_pick).setOnClickListener {
                 pendingId = m.id

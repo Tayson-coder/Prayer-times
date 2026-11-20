@@ -27,6 +27,12 @@
                 android:text="@string/audio_help"
                 android:textColor="@color/muted" />
 
+            <Button
+                android:id="@+id/download_all"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp" />
+
             <LinearLayout
                 android:id="@+id/audio_list"
                 android:layout_width="match_parent"

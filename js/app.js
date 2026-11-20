@@ -198,7 +198,9 @@
       list.push({ url, kind: 'ملف مرفوع' });
     }
     if (settings.customUrls[id]) list.push({ url: settings.customUrls[id], kind: 'رابط' });
-    list.push({ url: `audio/${id}.mp3`, kind: 'ملف محلي' });
+    if (await hasLocalFile(id)) list.push({ url: `audio/${id}.mp3`, kind: 'ملف محلي' });
+    const m = MUEZZINS.find((x) => x.id === id);
+    if (m && m.url) list.push({ url: m.url, kind: 'من الإنترنت' });
     return list;
   }
 
@@ -334,6 +336,8 @@
     if (await Store.getAudio(id)) return 'ملف مرفوع';
     if (settings.customUrls[id]) return 'رابط';
     if (await hasLocalFile(id)) return 'ملف محلي';
+    const m = MUEZZINS.find((x) => x.id === id);
+    if (m && m.url) return 'من الإنترنت';
     return null;
   }
 

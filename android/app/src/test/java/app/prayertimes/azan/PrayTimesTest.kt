@@ -82,3 +82,23 @@ class PrayTimesTest {
         assertEquals(null, PrayerSchedule.nextAzan(cairo, Instant.now()) { false })
     }
 }
+
+class MuezzinListTest {
+    @Test fun idsAreUniqueValidResourceNames() {
+        val ids = MUEZZINS.map { it.id }
+        assertEquals(ids.size, ids.toSet().size)
+        ids.forEach { assertTrue("bad id $it", Regex("[a-z][a-z0-9_]*").matches(it)) }
+    }
+
+    @Test fun downloadUrlsAreHttpsAndUnique() {
+        val urls = MUEZZINS.mapNotNull { it.url }
+        assertTrue(urls.size >= 10)
+        assertEquals(urls.size, urls.toSet().size)
+        urls.forEach { assertTrue(it, it.startsWith("https://") && !it.contains(' ')) }
+    }
+
+    @Test fun defaultsPointToDownloadableMuezzins() {
+        assertNotNull(muezzinById("abdulbasit").url)
+        assertNotNull(muezzinById("malekfajr").url)
+    }
+}

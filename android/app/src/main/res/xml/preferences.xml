@@ -17,7 +17,7 @@
 
     <PreferenceCategory app:title="@string/cat_azan">
         <ListPreference app:key="muezzin" app:title="@string/muezzin" app:defaultValue="abdulbasit" app:useSimpleSummaryProvider="true" />
-        <ListPreference app:key="fajr_muezzin" app:title="@string/fajr_muezzin" app:defaultValue="same" app:useSimpleSummaryProvider="true" />
+        <ListPreference app:key="fajr_muezzin" app:title="@string/fajr_muezzin" app:defaultValue="malekfajr" app:useSimpleSummaryProvider="true" />
         <Preference app:key="manage_audio" app:title="@string/manage_audio" />
         <SeekBarPreference app:key="volume" app:title="@string/volume" app:defaultValue="90" android:max="100" app:showSeekBarValue="true" />
         <SwitchPreferenceCompat app:key="enabled_fajr" app:title="@string/enable_fajr" app:defaultValue="true" />

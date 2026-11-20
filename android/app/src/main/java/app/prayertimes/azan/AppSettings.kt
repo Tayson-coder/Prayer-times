@@ -20,7 +20,7 @@ class AppSettings(context: Context) {
     val method: String get() = prefs.getString(KEY_METHOD, "egypt") ?: "egypt"
     val hanafiAsr: Boolean get() = prefs.getString(KEY_ASR, "standard") == "hanafi"
     val muezzin: String get() = prefs.getString(KEY_MUEZZIN, MUEZZINS[0].id) ?: MUEZZINS[0].id
-    val fajrMuezzin: String get() = prefs.getString(KEY_FAJR_MUEZZIN, SAME) ?: SAME
+    val fajrMuezzin: String get() = prefs.getString(KEY_FAJR_MUEZZIN, DEFAULT_FAJR) ?: DEFAULT_FAJR
     val volume: Float get() = prefs.getInt(KEY_VOLUME, 90) / 100f
 
     fun location() = PrayerSchedule.Location(lat, lng, zone, method, hanafiAsr, adjustments)
@@ -52,6 +52,7 @@ class AppSettings(context: Context) {
 
     companion object {
         const val SAME = "same"
+        const val DEFAULT_FAJR = "malekfajr"
         const val KEY_LAT = "lat"
         const val KEY_LNG = "lng"
         const val KEY_LOCATION_NAME = "location_name"

@@ -15,27 +15,42 @@ enum class Prayer(val key: String, val arabic: String, val hasAzan: Boolean) {
 
 /**
  * المؤذنون المشاهير. معرّف كل مؤذن (id) هو أيضاً اسم الملف الصوتي:
- * - ملف مدمج في التطبيق: app/src/main/res/raw/<id>.mp3
- * - أو ملف يختاره المستخدم من داخل التطبيق
+ * - ملف يختاره المستخدم أو يحمّله من داخل التطبيق
  * - أو رابط مباشر يدخله المستخدم
+ * - أو ملف مدمج في التطبيق: app/src/main/res/raw/<id>.mp3
+ * url: مصدر عام للتحميل بلمسة واحدة (null = لا يوجد مصدر، يضيفه المستخدم بنفسه)
  */
-data class Muezzin(val id: String, val name: String, val note: String)
+data class Muezzin(val id: String, val name: String, val note: String, val url: String? = null)
+
+/** تسجيلات عامة على GitHub (المستودع abodehq/Athan-MP3، مثبّتة على نسخة محددة) */
+private fun athan(file: String) =
+    "https://raw.githubusercontent.com/abodehq/Athan-MP3/cf1a9dd4f1e5e10009439099c5af74479ad332c0/Sounds/" +
+        file.replace(" ", "%20")
 
 val MUEZZINS = listOf(
-    Muezzin("abdulbasit", "الشيخ عبد الباسط عبد الصمد", "مصر"),
-    Muezzin("refaat", "الشيخ محمد رفعت", "مصر - أذان الإذاعة المصرية"),
-    Muezzin("tobar", "الشيخ نصر الدين طوبار", "مصر"),
-    Muezzin("minshawi", "الشيخ محمد صديق المنشاوي", "مصر"),
-    Muezzin("husary", "الشيخ محمود خليل الحصري", "مصر"),
-    Muezzin("banna", "الشيخ محمود علي البنا", "مصر"),
-    Muezzin("naina", "الشيخ أحمد نعينع", "مصر"),
-    Muezzin("mulla", "الشيخ علي أحمد ملا", "مؤذن الحرم المكي"),
-    Muezzin("hadrawi", "الشيخ فاروق حضراوي", "مؤذن الحرم المكي"),
-    Muezzin("bukhari", "الشيخ عصام بخاري", "مؤذن المسجد النبوي"),
-    Muezzin("abdulmajeed", "الشيخ عبد المجيد السريحي", "مؤذن المسجد النبوي"),
-    Muezzin("afasy", "الشيخ مشاري راشد العفاسي", "الكويت"),
-    Muezzin("qatami", "الشيخ ناصر القطامي", "السعودية"),
-    Muezzin("aqsa", "أذان المسجد الأقصى", "القدس"),
+    Muezzin("abdulbasit", "الشيخ عبد الباسط عبد الصمد", "أذان القاهرة", athan("Athan Abed Albase6.mp3")),
+    Muezzin("refaat", "الشيخ محمد رفعت", "أذان القاهرة", athan("Athan Mohammad Ref3at.mp3")),
+    Muezzin("naina", "الشيخ أحمد نعينع", "أذان القاهرة", athan("Athan Ahmad Nuyne3.mp3")),
+    Muezzin("minshawi", "الشيخ محمد صديق المنشاوي", "مصر", athan("Athan Mohammad Almenshawy.mp3")),
+    Muezzin("makkah", "أذان الحرم المكي", "مكة المكرمة", athan("Athan Makkah.mp3")),
+    Muezzin("afasy", "الشيخ مشاري راشد العفاسي", "الكويت", athan("Athan Mishary Alafasi.mp3")),
+    Muezzin("qatami", "الشيخ ناصر القطامي", "السعودية", athan("Athan Nasser Alqatami.mp3")),
+    Muezzin("malekfajr", "الشيخ مالك شيبة الحمد", "أذان الفجر (الصلاة خير من النوم)", athan("Athan Al-fajer - Malek chebae.mp3")),
+    Muezzin("zahrani", "الشيخ منصور الزهراني", "السعودية", athan("Athan Mansoor Az-Zahrani.mp3")),
+    Muezzin("hamathani", "الشيخ ماجد الهمذاني", "السعودية", athan("Athan Majed Al-hamathani.mp3")),
+    Muezzin("arkani", "الشيخ إبراهيم الأركاني", "السعودية", athan("Athan Ibrahim Al-Arkani.mp3")),
+    Muezzin("deghreri", "الشيخ حمد دغريري", "السعودية", athan("Athan Hamad Deghreri.mp3")),
+    Muezzin("malki", "الشيخ حمدان المالكي", "مسجد الملك فهد بنجران", athan("Athan Hamdan Almalki.mp3")),
+    Muezzin("suhaib", "الشيخ صهيب هاني", "فلسطين", athan("Athan Suhaib Khatba.mp3")),
+    // بدون مصدر عام: يضيف المستخدم الملف بنفسه
+    Muezzin("tobar", "الشيخ نصر الدين طوبار", "مصر — أضف الملف بنفسك"),
+    Muezzin("husary", "الشيخ محمود خليل الحصري", "مصر — أضف الملف بنفسك"),
+    Muezzin("banna", "الشيخ محمود علي البنا", "مصر — أضف الملف بنفسك"),
+    Muezzin("mulla", "الشيخ علي أحمد ملا", "الحرم المكي — أضف الملف بنفسك"),
+    Muezzin("hadrawi", "الشيخ فاروق حضراوي", "الحرم المكي — أضف الملف بنفسك"),
+    Muezzin("bukhari", "الشيخ عصام بخاري", "المسجد النبوي — أضف الملف بنفسك"),
+    Muezzin("abdulmajeed", "الشيخ عبد المجيد السريحي", "المسجد النبوي — أضف الملف بنفسك"),
+    Muezzin("aqsa", "أذان المسجد الأقصى", "القدس — أضف الملف بنفسك"),
 )
 
 fun muezzinById(id: String?): Muezzin = MUEZZINS.firstOrNull { it.id == id } ?: MUEZZINS[0]

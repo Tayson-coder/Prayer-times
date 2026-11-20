@@ -42,10 +42,22 @@
             android:textColor="@color/muted"
             android:textSize="13sp" />
 
-        <LinearLayout
+        <HorizontalScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/m_download"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="6dp"
+                android:text="@string/download" />
 
             <Button
                 android:id="@+id/m_pick"
@@ -77,5 +89,6 @@
                 android:layout_height="wrap_content"
                 android:text="@string/delete" />
         </LinearLayout>
+        </HorizontalScrollView>
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

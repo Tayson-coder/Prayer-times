@@ -21,6 +21,13 @@ jobs:
           distribution: temurin
           java-version: "17"
       - uses: gradle/actions/setup-gradle@v4
+      - name: Check azan download links
+        run: |
+          grep -o 'athan("[^"]*")' app/src/main/java/app/prayertimes/azan/Data.kt | sed 's/athan("//; s/")$//' | while read -r f; do
+            url="https://raw.githubusercontent.com/abodehq/Athan-MP3/cf1a9dd4f1e5e10009439099c5af74479ad332c0/Sounds/${f// /%20}"
+            size=$(curl -fsSL -o /dev/null -w '%{size_download}' "$url") || { echo "BROKEN: $f"; exit 1; }
+            echo "OK $size bytes: $f"
+          done
       - name: Unit tests
         run: ./gradlew --no-daemon testDebugUnitTest
       - name: Build APK

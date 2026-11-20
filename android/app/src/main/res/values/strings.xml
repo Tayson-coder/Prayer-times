@@ -15,6 +15,7 @@
     <string name="manage_audio">أصوات المؤذنين</string>
     <string name="source_is">مصدر الصوت: %1$s</string>
     <string name="no_audio_yet">لا يوجد ملف صوتي لهذا المؤذن بعد. أضفه من «أصوات المؤذنين»، وحتى ذلك الحين تُستخدم نغمة المنبّه.</string>
+    <string name="not_downloaded_yet">الصوت غير محمّل بعد. حمّله ليعمل الأذان بدون إنترنت.</string>
     <string name="no_audio">لا يوجد صوت</string>
     <string name="pick_file">اختيار ملف</string>
     <string name="link">رابط</string>
@@ -25,10 +26,21 @@
     <string name="bad_url">الرابط يجب أن يبدأ بـ http أو https</string>
     <string name="file_saved">تم حفظ الملف</string>
     <string name="file_failed">تعذّر حفظ الملف</string>
-    <string name="audio_help">اختر ملف الأذان (MP3) لكل مؤذن من جهازك، أو ضع رابطاً مباشراً لملف صوتي. الملفات تُحفظ داخل التطبيق.</string>
+    <string name="audio_help">حمّل أصوات المؤذنين بلمسة واحدة (تحتاج إنترنت مرة واحدة فقط)، أو اختر ملف أذان (MP3) من جهازك، أو ضع رابطاً مباشراً لملف صوتي.</string>
     <string name="warn_exact">اسمح للتطبيق بالمنبّهات الدقيقة حتى يُرفع الأذان في وقته بالضبط.</string>
     <string name="warn_notifications">الإشعارات متوقفة، فلن يظهر زر إيقاف الأذان على الشاشة.</string>
     <string name="fix">إصلاح</string>
+    <string name="download">⬇ تحميل</string>
+    <string name="downloading">جارٍ التحميل…</string>
+    <string name="downloading_n">جارٍ التحميل… %1$d من %2$d</string>
+    <string name="download_all">⬇ تحميل كل الأصوات (%1$d مؤذن)</string>
+    <string name="all_downloaded">✓ كل الأصوات المتاحة محمّلة</string>
+    <string name="download_all_ok">تم تحميل كل الأصوات ✓</string>
+    <string name="download_some_failed">تعذّر تحميل %1$d صوت. تأكد من الإنترنت وحاول مرة أخرى.</string>
+    <string name="download_failed">تعذّر التحميل. تأكد من الاتصال بالإنترنت.</string>
+    <string name="available_download">متاح للتحميل</string>
+    <string name="download_voice">⬇ تحميل صوت المؤذن</string>
+    <string name="voice_downloaded">تم تحميل الصوت ✓</string>
 
     <!-- الإعدادات -->
     <string name="cat_location">الموقع</string>
