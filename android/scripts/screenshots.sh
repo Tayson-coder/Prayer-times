@@ -11,6 +11,10 @@ adb root >/dev/null 2>&1; sleep 4; adb wait-for-device
 adb install -r app/build/outputs/apk/debug/app-debug.apk
 adb shell pm grant $PKG android.permission.POST_NOTIFICATIONS || true
 adb shell settings put global auto_time 0 || true
+# المحاكي على خوادم البناء بطيء، فقد يظهر «Pixel Launcher isn't responding» فوق التطبيق
+adb shell settings put global hide_error_dialogs 1 || true
+sleep 20
+adb shell am broadcast -a android.intent.action.CLOSE_SYSTEM_DIALOGS >/dev/null 2>&1 || true
 
 cat > /tmp/prefs.xml <<'XML'
 <?xml version='1.0' encoding='utf-8' standalone='yes' ?>
@@ -29,7 +33,11 @@ adb shell "run-as $PKG mkdir -p shared_prefs && run-as $PKG cp /data/local/tmp/p
 
 shot() { sleep "${2:-4}"; adb exec-out screencap -p > "$OUT/$1.png"; echo "shot $1"; }
 at() { adb shell "date -u $1" >/dev/null; }             # MMDDhhmmYYYY.ss (UTC)
-launch() { adb shell am force-stop $PKG; adb shell am start -W -n "$PKG/.$1" >/dev/null; }
+launch() {
+  adb shell am force-stop $PKG
+  adb shell am broadcast -a android.intent.action.CLOSE_SYSTEM_DIALOGS >/dev/null 2>&1 || true
+  adb shell am start -W -n "$PKG/.$1" >/dev/null
+}
 tap_id() {
   adb shell uiautomator dump /sdcard/ui.xml >/dev/null 2>&1
   adb pull /sdcard/ui.xml /tmp/ui.xml >/dev/null 2>&1
