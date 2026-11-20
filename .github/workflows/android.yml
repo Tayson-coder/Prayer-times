@@ -5,6 +5,9 @@ on:
     paths: ["android/**", ".github/workflows/android.yml"]
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -29,3 +32,24 @@ jobs:
           name: prayer-times-apk
           path: android/prayer-times.apk
           if-no-files-found: error
+      - name: Publish release (direct download link)
+        if: github.event_name != 'pull_request'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete apk-latest --yes --cleanup-tag || true
+          gh release create apk-latest prayer-times.apk \
+            --target "$GITHUB_SHA" \
+            --title "مواقيت الصلاة - أحدث نسخة" \
+            --notes "نزّل prayer-times.apk وثبّته على الموبايل. (بُني من ${GITHUB_SHA::7})"
+      - name: Save APK copy in the repository
+        if: github.event_name != 'pull_request'
+        run: |
+          mkdir -p ../apk
+          cp prayer-times.apk ../apk/prayer-times.apk
+          cd ..
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add apk/prayer-times.apk
+          git diff --cached --quiet || git commit -m "Update built APK [skip ci]"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
