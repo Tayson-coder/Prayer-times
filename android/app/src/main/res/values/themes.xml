@@ -1,16 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="Theme.PrayerTimes" parent="Theme.Material3.DayNight.NoActionBar">
-        <item name="colorPrimary">@color/accent</item>
-        <item name="colorOnPrimary">@color/on_accent</item>
-        <item name="colorSecondary">@color/accent</item>
-        <item name="colorAccent">@color/accent</item>
-        <item name="android:colorBackground">@color/bg</item>
-        <item name="colorSurface">@color/card</item>
-        <item name="colorOnSurface">@color/text</item>
-        <item name="android:windowBackground">@color/bg</item>
-        <item name="android:statusBarColor">@color/bg</item>
-        <item name="android:navigationBarColor">@color/bg</item>
+        <item name="colorPrimary">@color/cobalt</item>
+        <item name="colorOnPrimary">@color/sheet</item>
+        <item name="colorPrimaryContainer">@color/turquoise_soft</item>
+        <item name="colorOnPrimaryContainer">@color/ink</item>
+        <item name="colorSecondary">@color/turquoise</item>
+        <item name="colorSecondaryContainer">@color/turquoise_soft</item>
+        <item name="colorOnSecondaryContainer">@color/ink</item>
+        <item name="colorAccent">@color/cobalt</item>
+        <item name="android:colorBackground">@color/paper</item>
+        <item name="colorSurface">@color/sheet</item>
+        <item name="colorOnSurface">@color/ink</item>
+        <item name="colorOnSurfaceVariant">@color/muted</item>
+        <item name="colorSurfaceContainer">@color/sheet</item>
+        <item name="colorSurfaceContainerHigh">@color/sheet</item>
+        <item name="colorSurfaceContainerHighest">@color/sheet</item>
+        <item name="colorOutline">@color/line</item>
+        <item name="colorOutlineVariant">@color/line</item>
+        <item name="android:windowBackground">@color/paper</item>
+        <item name="android:statusBarColor">@color/paper</item>
+        <item name="android:navigationBarColor">@color/paper</item>
         <item name="android:windowLightStatusBar">@bool/light_bars</item>
+        <item name="android:windowLightNavigationBar">@bool/light_bars</item>
+
+        <!-- الخطوط: IBM Plex Sans Arabic للنصوص، Reem Kufi للعناوين وأسماء الصلوات -->
+        <item name="android:fontFamily">@font/plex_regular</item>
+        <item name="fontFamily">@font/plex_regular</item>
+        <item name="textAppearanceHeadlineSmall">@style/Text.Headline</item>
+        <item name="textAppearanceTitleLarge">@style/Text.TitleLarge</item>
+        <item name="textAppearanceTitleMedium">@style/Text.TitleMedium</item>
+        <item name="textAppearanceTitleSmall">@style/Text.TitleSmall</item>
+        <item name="textAppearanceBodyLarge">@style/Text.BodyLarge</item>
+        <item name="textAppearanceBodyMedium">@style/Text.BodyMedium</item>
+        <item name="textAppearanceBodySmall">@style/Text.BodySmall</item>
+        <item name="textAppearanceLabelLarge">@style/Text.Label</item>
+        <item name="android:textAppearanceListItem">@style/Text.BodyLarge</item>
+        <item name="android:textAppearanceListItemSecondary">@style/Text.BodyMedium</item>
+        <item name="android:textAppearanceListItemSmall">@style/Text.BodyLarge</item>
+        <item name="toolbarStyle">@style/Toolbar</item>
+    </style>
+
+    <!-- الشاشة الرئيسية: السماء تمتد خلف شريط الحالة -->
+    <style name="Theme.PrayerTimes.Main">
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:navigationBarColor">@color/sheet</item>
+    </style>
+
+    <style name="Toolbar" parent="Widget.Material3.Toolbar">
+        <item name="titleTextAppearance">@style/Text.ToolbarTitle</item>
+        <item name="android:background">@color/paper</item>
+    </style>
+
+    <style name="Text.ToolbarTitle" parent="TextAppearance.Material3.TitleLarge">
+        <item name="fontFamily">@font/kufi_medium</item>
+        <item name="android:fontFamily">@font/kufi_medium</item>
+        <item name="android:textSize">21sp</item>
+        <item name="android:textColor">@color/ink</item>
+    </style>
+    <style name="Text.Headline" parent="TextAppearance.Material3.HeadlineSmall">
+        <item name="fontFamily">@font/kufi_medium</item>
+        <item name="android:fontFamily">@font/kufi_medium</item>
+    </style>
+    <style name="Text.TitleLarge" parent="TextAppearance.Material3.TitleLarge">
+        <item name="fontFamily">@font/kufi_medium</item>
+        <item name="android:fontFamily">@font/kufi_medium</item>
+    </style>
+    <style name="Text.TitleMedium" parent="TextAppearance.Material3.TitleMedium">
+        <item name="fontFamily">@font/plex_semibold</item>
+        <item name="android:fontFamily">@font/plex_semibold</item>
+    </style>
+    <style name="Text.TitleSmall" parent="TextAppearance.Material3.TitleSmall">
+        <item name="fontFamily">@font/plex_semibold</item>
+        <item name="android:fontFamily">@font/plex_semibold</item>
+    </style>
+    <style name="Text.BodyLarge" parent="TextAppearance.Material3.BodyLarge">
+        <item name="fontFamily">@font/plex_regular</item>
+        <item name="android:fontFamily">@font/plex_regular</item>
+    </style>
+    <style name="Text.BodyMedium" parent="TextAppearance.Material3.BodyMedium">
+        <item name="fontFamily">@font/plex_regular</item>
+        <item name="android:fontFamily">@font/plex_regular</item>
+    </style>
+    <style name="Text.BodySmall" parent="TextAppearance.Material3.BodySmall">
+        <item name="fontFamily">@font/plex_regular</item>
+        <item name="android:fontFamily">@font/plex_regular</item>
+    </style>
+    <style name="Text.Label" parent="TextAppearance.Material3.LabelLarge">
+        <item name="fontFamily">@font/plex_semibold</item>
+        <item name="android:fontFamily">@font/plex_semibold</item>
+        <item name="android:textSize">15sp</item>
     </style>
 </resources>

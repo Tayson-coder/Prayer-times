@@ -1,94 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/Card">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="12dp">
+        android:gravity="center_vertical"
+        android:minHeight="72dp"
+        android:orientation="horizontal"
+        android:paddingVertical="10dp"
+        android:paddingStart="24dp"
+        android:paddingEnd="8dp">
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:layout_weight="1"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/m_name"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textColor="@color/text"
-                android:textStyle="bold" />
+                android:fontFamily="@font/plex_semibold"
+                android:textColor="@color/ink"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/m_note"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/plex_regular"
+                android:textColor="@color/muted"
+                android:textSize="13sp" />
 
             <TextView
                 android:id="@+id/m_status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/badge_bg"
-                android:paddingStart="10dp"
-                android:paddingTop="2dp"
-                android:paddingEnd="10dp"
-                android:paddingBottom="2dp"
-                android:textColor="@color/accent"
-                android:textSize="12sp" />
+                android:fontFamily="@font/plex_medium"
+                android:textSize="13sp" />
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/m_note"
+        <Button
+            android:id="@+id/m_download"
+            style="@style/Widget.Material3.Button.TonalButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/muted"
-            android:textSize="13sp" />
+            android:text="@string/download"
+            android:visibility="gone" />
 
-        <HorizontalScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:scrollbars="none">
+        <ImageButton
+            android:id="@+id/m_play"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/listen"
+            android:src="@drawable/ic_play"
+            app:tint="@color/cobalt" />
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/m_download"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="6dp"
-                android:text="@string/download" />
-
-            <Button
-                android:id="@+id/m_pick"
-                style="@style/Widget.Material3.Button.TonalButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="6dp"
-                android:text="@string/pick_file" />
-
-            <Button
-                android:id="@+id/m_url"
-                style="@style/Widget.Material3.Button.OutlinedButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="6dp"
-                android:text="@string/link" />
-
-            <Button
-                android:id="@+id/m_play"
-                style="@style/Widget.Material3.Button.TextButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/listen" />
-
-            <Button
-                android:id="@+id/m_delete"
-                style="@style/Widget.Material3.Button.TextButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/delete" />
-        </LinearLayout>
-        </HorizontalScrollView>
+        <ImageButton
+            android:id="@+id/m_more"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/more_options"
+            android:src="@drawable/ic_more"
+            app:tint="@color/muted" />
     </LinearLayout>
-</com.google.android.material.card.MaterialCardView>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_gravity="bottom"
+        android:layout_marginHorizontal="24dp"
+        android:background="@color/line" />
+</FrameLayout>

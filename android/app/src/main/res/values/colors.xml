@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="bg">#F4F1EA</color>
-    <color name="card">#FFFFFF</color>
-    <color name="text">#1D2A2A</color>
-    <color name="muted">#5F6F6C</color>
-    <color name="accent">#0F6B5C</color>
-    <color name="on_accent">#FFFFFF</color>
-    <color name="gold">#9A7020</color>
-    <color name="line">#E3DDD0</color>
-    <color name="active">#E8F3EF</color>
-    <color name="warn_bg">#FFF4DC</color>
+    <!-- حجر جيري بارد، حبر أردوازي، أزرق إزنيق، فيروزي للصلاة الحالية، نحاسي بقدر قليل -->
+    <color name="paper">#F3F5F4</color>
+    <color name="sheet">#FFFFFF</color>
+    <color name="ink">#13202B</color>
+    <color name="muted">#5B6B73</color>
+    <color name="line">#E2E7E5</color>
+    <color name="cobalt">#1D4F91</color>
+    <color name="fill">#1D4F91</color>
+    <color name="on_fill">#FFFFFF</color>
+    <color name="turquoise">#1E8C84</color>
+    <color name="turquoise_soft">#E3F2F0</color>
+    <color name="brass">#A97C2F</color>
+    <color name="warn_bg">#FBF3E0</color>
+    <color name="on_sky">#FFFFFF</color>
+    <color name="on_sky_soft">#D9FFFFFF</color>
+    <color name="on_sky_faint">#B3FFFFFF</color>
 </resources>
