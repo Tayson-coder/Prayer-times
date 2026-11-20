@@ -86,9 +86,9 @@ class SkyView @JvmOverloads constructor(ctx: Context, attrs: AttributeSet? = nul
         if (bg.shader == null) bg.shader = LinearGradient(0f, 0f, 0f, h, period.top, period.bottom, Shader.TileMode.CLAMP)
         canvas.drawRect(0f, 0f, w, h, bg)
 
-        val baseY = h - overlap - 14f * dp
+        val baseY = h - overlap - 12f * dp
         val rx = w / 2f - 40f * dp
-        val ry = min(rx * 0.6f, 104f * dp)
+        val ry = min(rx * 0.5f, 78f * dp)
         val cx = w / 2f
         fun x(t: Float) = cx + rx * cos(PI * t).toFloat()
         fun y(t: Float) = baseY - ry * sin(PI * t).toFloat()

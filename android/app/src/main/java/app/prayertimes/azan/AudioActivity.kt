@@ -86,16 +86,20 @@ class AudioActivity : BaseActivity() {
         row.findViewById<TextView>(R.id.m_name).text = m.name
         row.findViewById<TextView>(R.id.m_note).text = m.note
 
-        val label = AzanAudio.describe(this, m.id)
+        val source = AzanAudio.sources(this, m.id, includeFallback = false).firstOrNull()
         val downloading = AzanDownloader.isDownloading(m.id)
+        // الصوت المدمج هو الحالة العادية فلا نكتب عنه شيئاً؛ نعرض الحالة فقط إذا اختلفت
+        val status = when {
+            downloading -> getString(R.string.downloading)
+            source is AzanAudio.Source.Raw -> null
+            source != null -> source.label
+            m.url != null -> getString(R.string.available_download)
+            else -> getString(R.string.no_audio)
+        }
         row.findViewById<TextView>(R.id.m_status).apply {
-            text = when {
-                downloading -> getString(R.string.downloading)
-                label != null -> label
-                m.url != null -> getString(R.string.available_download)
-                else -> getString(R.string.no_audio)
-            }
-            setTextColor(ContextCompat.getColor(context, if (label != null) R.color.turquoise else R.color.muted))
+            text = status
+            visibility = if (status == null) View.GONE else View.VISIBLE
+            setTextColor(ContextCompat.getColor(context, if (source != null) R.color.turquoise else R.color.muted))
         }
 
         row.findViewById<Button>(R.id.m_download).apply {

@@ -25,8 +25,8 @@
         <item name="android:windowLightNavigationBar">@bool/light_bars</item>
 
         <!-- الخطوط: IBM Plex Sans Arabic للنصوص، Reem Kufi للعناوين وأسماء الصلوات -->
+        <!-- android:fontFamily فقط: لو أُضيف fontFamily (بدون android) هنا لغلب الخط المحدد على كل عنصر -->
         <item name="android:fontFamily">@font/plex_regular</item>
-        <item name="fontFamily">@font/plex_regular</item>
         <item name="textAppearanceHeadlineSmall">@style/Text.Headline</item>
         <item name="textAppearanceTitleLarge">@style/Text.TitleLarge</item>
         <item name="textAppearanceTitleMedium">@style/Text.TitleMedium</item>
