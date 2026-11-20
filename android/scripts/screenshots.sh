@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
-# يشغّل التطبيق على المحاكي ويلتقط صوراً لشاشاته في أوقات مختلفة من اليوم، ويتحقق من عدم وجود أعطال
+# يشغّل التطبيق على المحاكي ويلتقط صوراً لشاشاته، ويتحقق من عدم وجود أعطال
 set -uo pipefail
 cd "$(dirname "$0")/.."
-PKG=app.prayertimes.azan
+PKG=app.azkar.sabahmasaa
+CLS=app.azkar
 OUT=../screenshots
 mkdir -p "$OUT"
 rm -f "$OUT"/*.png
@@ -11,32 +12,15 @@ adb root >/dev/null 2>&1; sleep 4; adb wait-for-device
 adb install -r app/build/outputs/apk/debug/app-debug.apk
 adb shell pm grant $PKG android.permission.POST_NOTIFICATIONS || true
 adb shell settings put global auto_time 0 || true
-# المحاكي على خوادم البناء بطيء، فقد يظهر «Pixel Launcher isn't responding» فوق التطبيق
 adb shell settings put global hide_error_dialogs 1 || true
 sleep 20
 adb shell am broadcast -a android.intent.action.CLOSE_SYSTEM_DIALOGS >/dev/null 2>&1 || true
 
-cat > /tmp/prefs.xml <<'XML'
-<?xml version='1.0' encoding='utf-8' standalone='yes' ?>
-<map>
-    <string name="lat">30.0444</string>
-    <string name="lng">31.2357</string>
-    <string name="location_name">القاهرة</string>
-    <string name="tz">Africa/Cairo</string>
-    <string name="city">0</string>
-    <string name="method">egypt</string>
-</map>
-XML
-adb push /tmp/prefs.xml /data/local/tmp/prefs.xml
-adb shell chmod 644 /data/local/tmp/prefs.xml
-adb shell "run-as $PKG mkdir -p shared_prefs && run-as $PKG cp /data/local/tmp/prefs.xml shared_prefs/${PKG}_preferences.xml"
-
-shot() { sleep "${2:-4}"; adb exec-out screencap -p > "$OUT/$1.png"; echo "shot $1"; }
-at() { adb shell "date -u $1" >/dev/null; }             # MMDDhhmmYYYY.ss (UTC)
-launch() {
+shot() { sleep "${2:-3}"; adb exec-out screencap -p > "$OUT/$1.png"; echo "shot $1"; }
+start() {
   adb shell am force-stop $PKG
   adb shell am broadcast -a android.intent.action.CLOSE_SYSTEM_DIALOGS >/dev/null 2>&1 || true
-  adb shell am start -W -n "$PKG/.$1" >/dev/null
+  adb shell am start -W -n "$PKG/$CLS.$1" "${@:2}" >/dev/null
 }
 tap_id() {
   adb shell uiautomator dump /sdcard/ui.xml >/dev/null 2>&1
@@ -50,42 +34,28 @@ print((x1 + x2) // 2, (y1 + y2) // 2)
 PY
 }
 
+adb shell "date -u 112004002026.00" >/dev/null       # 06:00 القاهرة: وقت أذكار الصباح
 adb shell cmd uimode night no
-at 112010202026.00; launch MainActivity; shot 1-main-afternoon 6     # 12:20 القاهرة: بين الظهر والعصر
-at 112015102026.00; launch MainActivity; shot 2-main-maghrib          # 17:10: بعد المغرب
-tap_id muezzin_row; shot 3-muezzin-picker 2
+start MainActivity; shot 1-home 5
+start ReaderActivity --es kind MORNING; shot 2-reader-first
+tap_id next; shot 3-reader-ayat-alkursi 2
+tap_id next; sleep 1; tap_id tasbih; sleep 0.5; tap_id tasbih; shot 4-reader-ikhlas-counting 2
+tap_id info; shot 5-info-dialog 2
 adb shell input keyevent KEYCODE_BACK
+start MainActivity; shot 6-home-progress
 adb shell cmd uimode night yes
-at 112019002026.00; launch MainActivity; shot 4-main-night-dark      # 21:00: ليلاً، الوضع الداكن
-at 112003302026.00; launch MainActivity; shot 5-main-fajr-dark        # 05:30: بين الفجر والشروق
+start ReaderActivity --es kind EVENING; shot 7-reader-evening-dark
+start MainActivity; shot 8-home-dark
 adb shell cmd uimode night no
-launch SettingsActivity; shot 6-settings
-launch AudioActivity; shot 7-audio
-adb shell cmd uimode night yes
-launch AudioActivity; shot 8-audio-dark
-adb shell cmd uimode night no
-
-# الأذكار: صباح (مع الضغط على أول ذكرين)، ومساء داكن
-at 112006002026.00
-adb shell am force-stop $PKG
-adb shell am start -W -n "$PKG/.AzkarActivity" --es kind MORNING >/dev/null
-sleep 3
-adb shell input tap 540 900; sleep 0.4; adb shell input tap 540 900
-shot 9-azkar-morning 2
-adb shell cmd uimode night yes
-adb shell am force-stop $PKG
-adb shell am start -W -n "$PKG/.AzkarActivity" --es kind EVENING >/dev/null
-shot 10-azkar-evening-dark
-adb shell cmd uimode night no
-# إشعار ذكر الله وتذكير الأذكار
-adb shell am broadcast -n "$PKG/.DhikrReceiver" -a app.prayertimes.azan.ACTION_DHIKR >/dev/null
-adb shell am broadcast -n "$PKG/.DhikrReceiver" -a app.prayertimes.azan.ACTION_AZKAR --es kind EVENING >/dev/null
+start SettingsActivity; shot 9-settings
+adb shell am broadcast -n "$PKG/$CLS.ReminderReceiver" -a app.azkar.REMIND --es kind MORNING >/dev/null
+adb shell am broadcast -n "$PKG/$CLS.ReminderReceiver" -a app.azkar.DHIKR >/dev/null
 sleep 2
 adb shell cmd statusbar expand-notifications
-shot 11-notifications 3
+shot 10-notifications 3
 adb shell cmd statusbar collapse
 
 adb logcat -d -b crash > "$OUT/crash-log.txt" || true
-if grep -q "$PKG" "$OUT/crash-log.txt"; then echo "APP CRASHED:"; cat "$OUT/crash-log.txt"; exit 1; fi
+if grep -q "$PKG\|$CLS" "$OUT/crash-log.txt"; then echo "APP CRASHED:"; cat "$OUT/crash-log.txt"; exit 1; fi
 rm -f "$OUT/crash-log.txt"
 echo "no crashes"

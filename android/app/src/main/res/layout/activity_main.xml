@@ -1,318 +1,189 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/scroll"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/sheet"
     android:fillViewport="true"
-    android:layoutDirection="rtl"
-    android:overScrollMode="never">
+    android:fitsSystemWindows="true"
+    android:layoutDirection="rtl">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingHorizontal="20dp"
+        android:paddingBottom="24dp">
 
-        <!-- السماء: لون الفترة الحالية ومسار الشمس -->
-        <FrameLayout
+        <ImageButton
+            android:id="@+id/settings"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="end"
+            android:layout_marginTop="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/settings"
+            android:src="@drawable/ic_settings"
+            app:tint="@color/control" />
+
+        <TextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:fontFamily="@font/amiri_bold"
+            android:gravity="center"
+            android:text="@string/app_name"
+            android:textColor="@color/ink"
+            android:textSize="34sp" />
 
-            <app.prayertimes.azan.SkyView
-                android:id="@+id/sky"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="6dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="70dp"
+                android:layout_height="10dp"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ornament" />
+
+            <ImageView
+                android:layout_width="70dp"
+                android:layout_height="10dp"
+                android:importantForAccessibility="no"
+                android:scaleX="-1"
+                android:src="@drawable/ornament" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/hijri"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/plex_regular"
+            android:gravity="center"
+            android:textColor="@color/muted"
+            android:textSize="15sp" />
+
+        <LinearLayout
+            android:id="@+id/morning_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:background="@drawable/card"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="20dp">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_sun"
+                app:tint="@color/accent" />
 
             <LinearLayout
-                android:id="@+id/hero"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingStart="24dp"
-                android:paddingTop="16dp"
-                android:paddingEnd="12dp"
-                android:paddingBottom="128dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:paddingTop="6dp">
-
-                        <TextView
-                            android:id="@+id/location_name"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/plex_medium"
-                            android:textColor="@color/on_sky"
-                            android:textSize="17sp" />
-
-                        <TextView
-                            android:id="@+id/hijri_date"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/plex_regular"
-                            android:textColor="@color/on_sky_soft"
-                            android:textSize="14sp" />
-
-                        <TextView
-                            android:id="@+id/greg_date"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/plex_regular"
-                            android:textColor="@color/on_sky_faint"
-                            android:textSize="13sp" />
-                    </LinearLayout>
-
-                    <ImageButton
-                        android:id="@+id/settings_button"
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:contentDescription="@string/settings"
-                        android:src="@drawable/ic_settings"
-                        app:tint="@color/on_sky" />
-                </LinearLayout>
+                android:layout_marginStart="16dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/next_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="18dp"
-                    android:fontFamily="@font/kufi_bold"
-                    android:includeFontPadding="false"
-                    android:textColor="@color/on_sky"
-                    android:textSize="56sp" />
+                    android:fontFamily="@font/amiri_bold"
+                    android:text="@string/morning_azkar"
+                    android:textColor="@color/ink"
+                    android:textSize="27sp" />
 
                 <TextView
-                    android:id="@+id/countdown"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:fontFamily="@font/kufi_medium"
-                    android:textColor="@color/on_sky"
-                    android:textSize="30sp" />
-
-                <TextView
-                    android:id="@+id/next_time"
+                    android:id="@+id/morning_progress"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/plex_regular"
-                    android:textColor="@color/on_sky_soft"
-                    android:textSize="15sp" />
-            </LinearLayout>
-        </FrameLayout>
+                    android:textColor="@color/muted"
+                    android:textSize="14sp" />
 
-        <!-- اللوح: المواقيت ثم المؤذن -->
-        <LinearLayout
-            android:id="@+id/sheet"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginTop="-24dp"
-            android:layout_weight="1"
-            android:background="@drawable/sheet_bg"
-            android:orientation="vertical"
-            android:paddingTop="10dp"
-            android:paddingBottom="24dp">
-
-            <LinearLayout
-                android:id="@+id/azan_banner"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginBottom="6dp"
-                android:background="@color/turquoise_soft"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:paddingVertical="6dp"
-                android:paddingStart="16dp"
-                android:paddingEnd="8dp"
-                android:visibility="gone">
-
-                <TextView
-                    android:id="@+id/azan_banner_text"
-                    android:layout_width="0dp"
+                <com.google.android.material.progressindicator.LinearProgressIndicator
+                    android:id="@+id/morning_bar"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/plex_semibold"
-                    android:textColor="@color/ink"
-                    android:textSize="16sp" />
-
-                <Button
-                    android:id="@+id/stop_azan_button"
-                    style="@style/Widget.Material3.Button.TextButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/stop_azan" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/warnings"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="gone" />
-
-            <LinearLayout
-                android:id="@+id/times_list"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginHorizontal="24dp"
-                android:layout_marginTop="12dp"
-                android:background="@color/line" />
-
-            <LinearLayout
-                android:id="@+id/azkar_row"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackground"
-                android:gravity="center_vertical"
-                android:minHeight="64dp"
-                android:orientation="horizontal"
-                android:paddingStart="24dp"
-                android:paddingEnd="16dp">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/azkar_title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/kufi_medium"
-                        android:textColor="@color/ink"
-                        android:textSize="19sp" />
-
-                    <TextView
-                        android:id="@+id/azkar_subtitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/plex_regular"
-                        android:textColor="@color/muted"
-                        android:textSize="13sp" />
-                </LinearLayout>
-
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:importantForAccessibility="no"
-                    android:src="@drawable/ic_chevron"
-                    app:tint="@color/muted" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginHorizontal="24dp"
-                android:background="@color/line" />
-
-            <LinearLayout
-                android:id="@+id/muezzin_row"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackground"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:paddingStart="24dp"
-                android:paddingTop="14dp"
-                android:paddingEnd="16dp"
-                android:paddingBottom="10dp">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/plex_regular"
-                        android:text="@string/muezzin"
-                        android:textColor="@color/muted"
-                        android:textSize="13sp" />
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/muezzin_name"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/plex_semibold"
-                            android:textColor="@color/ink"
-                            android:textSize="17sp" />
-
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_marginStart="4dp"
-                            android:importantForAccessibility="no"
-                            android:src="@drawable/ic_expand"
-                            app:tint="@color/muted" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <ImageButton
-                    android:id="@+id/preview_button"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:background="@drawable/play_bg"
-                    android:contentDescription="@string/listen"
-                    android:src="@drawable/ic_play"
-                    app:tint="@color/on_fill" />
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/muezzin_source"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="24dp"
-                android:fontFamily="@font/plex_regular"
-                android:textColor="@color/muted"
-                android:textSize="13sp"
-                android:visibility="gone" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingHorizontal="12dp">
-
-                <Button
-                    android:id="@+id/download_voice_button"
-                    style="@style/Widget.Material3.Button.TonalButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
-                    android:text="@string/download_voice"
-                    android:visibility="gone" />
-
-                <Button
-                    android:id="@+id/manage_audio_button"
-                    style="@style/Widget.Material3.Button.TextButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/manage_audio" />
+                    android:layout_marginTop="10dp"
+                    app:indicatorColor="@color/accent"
+                    app:trackColor="@color/line"
+                    app:trackCornerRadius="2dp"
+                    app:trackThickness="4dp" />
             </LinearLayout>
         </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/evening_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/card"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="20dp">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_moon"
+                app:tint="@color/accent" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/amiri_bold"
+                    android:text="@string/evening_azkar"
+                    android:textColor="@color/ink"
+                    android:textSize="27sp" />
+
+                <TextView
+                    android:id="@+id/evening_progress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/plex_regular"
+                    android:textColor="@color/muted"
+                    android:textSize="14sp" />
+
+                <com.google.android.material.progressindicator.LinearProgressIndicator
+                    android:id="@+id/evening_bar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    app:indicatorColor="@color/accent"
+                    app:trackColor="@color/line"
+                    app:trackCornerRadius="2dp"
+                    app:trackThickness="4dp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:fontFamily="@font/plex_regular"
+            android:gravity="center"
+            android:lineSpacingMultiplier="1.3"
+            android:text="@string/source_short"
+            android:textColor="@color/muted"
+            android:textSize="13sp" />
     </LinearLayout>
 </ScrollView>

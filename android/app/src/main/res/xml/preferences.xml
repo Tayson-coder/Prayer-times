@@ -1,58 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <PreferenceCategory app:title="@string/cat_location">
-        <Preference app:key="use_gps" app:title="@string/use_gps" />
-        <ListPreference app:key="city" app:title="@string/city" app:useSimpleSummaryProvider="true" />
-        <EditTextPreference app:key="lat" app:title="@string/lat" app:useSimpleSummaryProvider="true" />
-        <EditTextPreference app:key="lng" app:title="@string/lng" app:useSimpleSummaryProvider="true" />
+    <PreferenceCategory app:title="@string/cat_reminders">
+        <SwitchPreferenceCompat app:key="remind_morning" app:title="@string/remind_morning" app:defaultValue="true" />
+        <Preference app:key="morning_time" app:title="@string/morning_time" app:dependency="remind_morning" />
+        <SwitchPreferenceCompat app:key="remind_evening" app:title="@string/remind_evening" app:defaultValue="true" />
+        <Preference app:key="evening_time" app:title="@string/evening_time" app:dependency="remind_evening" />
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="@string/cat_method">
-        <ListPreference app:key="method" app:title="@string/method" app:defaultValue="egypt" app:useSimpleSummaryProvider="true" />
-        <ListPreference app:key="asr" app:title="@string/asr" app:defaultValue="standard"
-            app:entries="@array/asr_entries" app:entryValues="@array/asr_values" app:useSimpleSummaryProvider="true" />
-    </PreferenceCategory>
-
-    <PreferenceCategory app:title="@string/cat_azan">
-        <ListPreference app:key="muezzin" app:title="@string/muezzin" app:defaultValue="abdulbasit" app:useSimpleSummaryProvider="true" />
-        <ListPreference app:key="fajr_muezzin" app:title="@string/fajr_muezzin" app:defaultValue="malekfajr" app:useSimpleSummaryProvider="true" />
-        <Preference app:key="manage_audio" app:title="@string/manage_audio" />
-        <SeekBarPreference app:key="volume" app:title="@string/volume" app:summary="@string/volume_summary"
-            app:defaultValue="100" android:max="100" app:showSeekBarValue="true" app:updatesContinuously="true" />
-        <SwitchPreferenceCompat app:key="alarm_stream" app:title="@string/alarm_stream" app:defaultValue="false"
-            app:summaryOff="@string/alarm_stream_off" app:summaryOn="@string/alarm_stream_on" />
-        <SwitchPreferenceCompat app:key="enabled_fajr" app:title="@string/enable_fajr" app:defaultValue="true" />
-        <SwitchPreferenceCompat app:key="enabled_dhuhr" app:title="@string/enable_dhuhr" app:defaultValue="true" />
-        <SwitchPreferenceCompat app:key="enabled_asr" app:title="@string/enable_asr" app:defaultValue="true" />
-        <SwitchPreferenceCompat app:key="enabled_maghrib" app:title="@string/enable_maghrib" app:defaultValue="true" />
-        <SwitchPreferenceCompat app:key="enabled_isha" app:title="@string/enable_isha" app:defaultValue="true" />
-        <Preference app:key="test_azan" app:title="@string/test_azan" app:summary="@string/test_azan_summary" />
-    </PreferenceCategory>
-
-    <PreferenceCategory app:title="@string/cat_azkar">
-        <Preference app:key="open_azkar" app:title="@string/open_azkar" />
-        <SwitchPreferenceCompat app:key="azkar_reminders" app:title="@string/azkar_reminders"
-            app:summary="@string/azkar_reminders_summary" app:defaultValue="true" />
+    <PreferenceCategory app:title="@string/cat_dhikr">
         <SwitchPreferenceCompat app:key="dhikr_notifications" app:title="@string/dhikr_notifications" app:defaultValue="true"
-            app:summaryOn="@string/dhikr_notifications_on" app:summaryOff="@string/dhikr_notifications_off" />
+            app:summaryOn="@string/dhikr_on" app:summaryOff="@string/dhikr_off" />
         <ListPreference app:key="dhikr_interval" app:title="@string/dhikr_interval" app:defaultValue="2"
             app:dependency="dhikr_notifications" app:entries="@array/dhikr_interval_entries"
             app:entryValues="@array/dhikr_interval_values" app:useSimpleSummaryProvider="true" />
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="@string/cat_adjust">
-        <EditTextPreference app:key="adjust_fajr" app:title="الفجر" app:defaultValue="0" app:useSimpleSummaryProvider="true" />
-        <EditTextPreference app:key="adjust_sunrise" app:title="الشروق" app:defaultValue="0" app:useSimpleSummaryProvider="true" />
-        <EditTextPreference app:key="adjust_dhuhr" app:title="الظهر" app:defaultValue="0" app:useSimpleSummaryProvider="true" />
-        <EditTextPreference app:key="adjust_asr" app:title="العصر" app:defaultValue="0" app:useSimpleSummaryProvider="true" />
-        <EditTextPreference app:key="adjust_maghrib" app:title="المغرب" app:defaultValue="0" app:useSimpleSummaryProvider="true" />
-        <EditTextPreference app:key="adjust_isha" app:title="العشاء" app:defaultValue="0" app:useSimpleSummaryProvider="true" />
+    <PreferenceCategory app:title="@string/cat_reading">
+        <ListPreference app:key="text_size" app:title="@string/text_size" app:defaultValue="medium"
+            app:entries="@array/text_size_entries" app:entryValues="@array/text_size_values" app:useSimpleSummaryProvider="true" />
+        <SwitchPreferenceCompat app:key="vibrate" app:title="@string/vibrate" app:defaultValue="true" />
+        <SwitchPreferenceCompat app:key="auto_advance" app:title="@string/auto_advance" app:summary="@string/auto_advance_summary" app:defaultValue="true" />
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="@string/cat_reliability">
-        <Preference app:key="exact_alarm" app:title="@string/exact_alarm" />
-        <Preference app:key="battery" app:title="@string/battery" app:summary="@string/battery_summary" />
+    <PreferenceCategory app:title="@string/cat_about">
+        <Preference app:key="about_source" app:title="@string/about_source" app:summary="@string/about_source_summary" app:selectable="false" />
+        <Preference app:key="about_fonts" app:title="@string/about_fonts" app:summary="@string/about_fonts_summary" app:selectable="false" />
     </PreferenceCategory>
 </PreferenceScreen>

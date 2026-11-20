@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:layoutDirection="rtl"
+    android:orientation="vertical">
+
+    <!-- الرأس: رجوع، العنوان بين زخرفتين، معلومات -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="12dp">
+
+        <ImageButton
+            android:id="@+id/back"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/back"
+            android:src="@drawable/ic_back"
+            app:tint="@color/control" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="56dp"
+                android:layout_height="10dp"
+                android:importantForAccessibility="no"
+                android:scaleType="fitXY"
+                android:src="@drawable/ornament" />
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="8dp"
+                android:fontFamily="@font/amiri_bold"
+                android:textColor="@color/ink"
+                android:textSize="22sp" />
+
+            <ImageView
+                android:layout_width="56dp"
+                android:layout_height="10dp"
+                android:importantForAccessibility="no"
+                android:scaleType="fitXY"
+                android:scaleX="-1"
+                android:src="@drawable/ornament" />
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/info"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/info_title"
+            android:src="@drawable/ic_info"
+            app:tint="@color/control" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/position"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="2dp"
+        android:background="@drawable/pill"
+        android:fontFamily="@font/plex_medium"
+        android:paddingHorizontal="18dp"
+        android:paddingVertical="3dp"
+        android:textColor="@color/muted"
+        android:textDirection="ltr"
+        android:textSize="16sp" />
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/pager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layoutDirection="rtl" />
+
+    <!-- الشريط السفلي (من اليمين): مشاركة، السابق، المسبحة، التالي، إعادة -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="14dp"
+        android:paddingBottom="14dp">
+
+        <ImageButton
+            android:id="@+id/share"
+            style="@style/ControlCircle"
+            android:contentDescription="@string/share"
+            android:src="@drawable/ic_share" />
+
+        <Space android:layout_width="0dp" android:layout_height="1dp" android:layout_weight="1" />
+
+        <ImageButton
+            android:id="@+id/prev"
+            style="@style/ControlSquare"
+            android:contentDescription="@string/previous"
+            android:src="@drawable/ic_prev" />
+
+        <app.azkar.TasbihView
+            android:id="@+id/tasbih"
+            android:layout_width="132dp"
+            android:layout_height="132dp"
+            android:layout_marginHorizontal="4dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true" />
+
+        <ImageButton
+            android:id="@+id/next"
+            style="@style/ControlSquare"
+            android:contentDescription="@string/next"
+            android:src="@drawable/ic_next" />
+
+        <Space android:layout_width="0dp" android:layout_height="1dp" android:layout_weight="1" />
+
+        <ImageButton
+            android:id="@+id/reset"
+            style="@style/ControlCircle"
+            android:contentDescription="@string/reset_this"
+            android:src="@drawable/ic_reset" />
+    </LinearLayout>
+</LinearLayout>
