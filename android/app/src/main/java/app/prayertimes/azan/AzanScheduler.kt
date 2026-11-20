@@ -62,6 +62,7 @@ class AzanReceiver : BroadcastReceiver() {
         } else {
             // BOOT_COMPLETED / TIME_SET / TIMEZONE_CHANGED / MY_PACKAGE_REPLACED
             AzanScheduler.schedule(ctx)
+            DhikrScheduler.schedule(ctx)
         }
     }
 }

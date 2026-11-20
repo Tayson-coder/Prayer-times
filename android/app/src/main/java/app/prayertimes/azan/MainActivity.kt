@@ -94,6 +94,9 @@ class MainActivity : BaseActivity() {
             tick()
         }
         findViewById<View>(R.id.muezzin_row).setOnClickListener { chooseMuezzin() }
+        findViewById<View>(R.id.azkar_row).setOnClickListener {
+            startActivity(AzkarActivity.intent(this, suggestedAzkar()))
+        }
         findViewById<ImageButton>(R.id.preview_button).setOnClickListener { togglePreview() }
         findViewById<Button>(R.id.manage_audio_button).setOnClickListener {
             startActivity(Intent(this, AudioActivity::class.java))
@@ -226,6 +229,24 @@ class MainActivity : BaseActivity() {
         box.visibility = if (box.childCount > 0) View.VISIBLE else View.GONE
     }
 
+    // ---------- الأذكار ----------
+
+    private fun suggestedAzkar(): AzkarKind {
+        val loc = settings.location()
+        return AzkarTimes.suggested(PrayerSchedule.day(loc, PrayerSchedule.today(loc)), Instant.now())
+    }
+
+    private fun updateAzkarRow() {
+        val kind = suggestedAzkar()
+        val p = AzkarProgress(this, kind)
+        findViewById<TextView>(R.id.azkar_title).text = kind.title
+        findViewById<TextView>(R.id.azkar_subtitle).text = when (p.done) {
+            0 -> getString(R.string.azkar_not_started, String.format(arabic, "%d", p.total))
+            p.total -> getString(R.string.azkar_all_done, kind.title)
+            else -> getString(R.string.azkar_progress, String.format(arabic, "%d", p.done), String.format(arabic, "%d", p.total))
+        }
+    }
+
     // ---------- المواقيت ----------
 
     private fun tick() {
@@ -254,6 +275,7 @@ class MainActivity : BaseActivity() {
             lastMinute = minute
             val isha = times.getValue(Prayer.ISHA)
             sky.update(times, isha, now)
+            updateAzkarRow()
             val current = Prayer.entries.lastOrNull { !times.getValue(it).isAfter(now) }
             val nextToday = if (times.getValue(next) == at) next else null
             for ((p, row) in rows) {

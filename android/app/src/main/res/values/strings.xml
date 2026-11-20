@@ -98,4 +98,47 @@
         <item>standard</item>
         <item>hanafi</item>
     </string-array>
+
+    <!-- الأذكار -->
+    <string name="morning">الصباح</string>
+    <string name="evening">المساء</string>
+    <string name="azkar_reset">البدء من جديد</string>
+    <string name="azkar_progress">أتممت %1$s من %2$s</string>
+    <string name="azkar_not_started">%1$s ذكراً، اضغط على الذكر بعد قوله</string>
+    <string name="azkar_all_done">أتممت %1$s، تقبّل الله</string>
+    <string name="times_once">مرة واحدة</string>
+    <string name="times_twice">مرتان</string>
+    <string name="times_few">%1$s مرات</string>
+    <string name="times_many">%1$s مرة</string>
+    <string name="dhikr_done">تم</string>
+    <string name="dhikr_left">باقي %1$s</string>
+    <string name="azkar_morning_body">حان وقت أذكار الصباح</string>
+    <string name="azkar_evening_body">حان وقت أذكار المساء</string>
+    <string name="read_now">قراءة الأذكار</string>
+    <string name="turn_off_reminders">إيقاف التذكير</string>
+    <string name="turn_off_dhikr">إيقاف هذه الإشعارات</string>
+    <string name="channel_azkar">تذكير الأذكار</string>
+    <string name="channel_azkar_desc">تذكير بأذكار الصباح بعد الفجر وأذكار المساء بعد العصر</string>
+    <string name="channel_dhikr">ذكر الله</string>
+    <string name="channel_dhikr_desc">ذكر قصير بدون صوت على مدار اليوم</string>
+    <string name="cat_azkar">الأذكار</string>
+    <string name="open_azkar">أذكار الصباح والمساء</string>
+    <string name="azkar_reminders">تذكير بأذكار الصباح والمساء</string>
+    <string name="azkar_reminders_summary">بعد أذان الفجر وأذان العصر بربع ساعة</string>
+    <string name="dhikr_notifications">إشعارات ذكر الله</string>
+    <string name="dhikr_notifications_on">ذكر قصير بدون صوت، من ٨ صباحاً حتى ١٠ مساءً</string>
+    <string name="dhikr_notifications_off">متوقفة</string>
+    <string name="dhikr_interval">عدد مرات الإشعار</string>
+    <string-array name="dhikr_interval_entries">
+        <item>كل ساعة</item>
+        <item>كل ساعتين</item>
+        <item>كل ٣ ساعات</item>
+        <item>كل ٤ ساعات</item>
+    </string-array>
+    <string-array name="dhikr_interval_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
 </resources>

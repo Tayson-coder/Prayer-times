@@ -25,6 +25,10 @@ class AppSettings(context: Context) {
     /** true: صوت المنبّه (يعمل حتى لو الوسائط مكتومة). false: يتبع صوت الوسائط وأزرار الصوت */
     val useAlarmStream: Boolean get() = prefs.getBoolean(KEY_ALARM_STREAM, false)
 
+    val azkarReminders: Boolean get() = prefs.getBoolean(KEY_AZKAR_REMINDERS, true)
+    val dhikrNotifications: Boolean get() = prefs.getBoolean(KEY_DHIKR_NOTIFICATIONS, true)
+    val dhikrIntervalHours: Int get() = prefs.getString(KEY_DHIKR_INTERVAL, "2")?.toIntOrNull() ?: 2
+
     fun location() = PrayerSchedule.Location(lat, lng, zone, method, hanafiAsr, adjustments)
 
     fun muezzinFor(p: Prayer): String =
@@ -66,5 +70,8 @@ class AppSettings(context: Context) {
         const val KEY_FAJR_MUEZZIN = "fajr_muezzin"
         const val KEY_VOLUME = "volume"
         const val KEY_ALARM_STREAM = "alarm_stream"
+        const val KEY_AZKAR_REMINDERS = "azkar_reminders"
+        const val KEY_DHIKR_NOTIFICATIONS = "dhikr_notifications"
+        const val KEY_DHIKR_INTERVAL = "dhikr_interval"
     }
 }

@@ -12,7 +12,9 @@ class App : Application() {
         super.onCreate()
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false)
         AzanService.createChannel(this)
+        DhikrScheduler.createChannels(this)
         AzanScheduler.schedule(this)
+        DhikrScheduler.schedule(this)
     }
 }
 

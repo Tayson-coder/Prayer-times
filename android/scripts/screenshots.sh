@@ -65,6 +65,26 @@ adb shell cmd uimode night yes
 launch AudioActivity; shot 8-audio-dark
 adb shell cmd uimode night no
 
+# الأذكار: صباح (مع الضغط على أول ذكرين)، ومساء داكن
+at 112006002026.00
+adb shell am force-stop $PKG
+adb shell am start -W -n "$PKG/.AzkarActivity" --es kind MORNING >/dev/null
+sleep 3
+adb shell input tap 540 900; sleep 0.4; adb shell input tap 540 900
+shot 9-azkar-morning 2
+adb shell cmd uimode night yes
+adb shell am force-stop $PKG
+adb shell am start -W -n "$PKG/.AzkarActivity" --es kind EVENING >/dev/null
+shot 10-azkar-evening-dark
+adb shell cmd uimode night no
+# إشعار ذكر الله وتذكير الأذكار
+adb shell am broadcast -n "$PKG/.DhikrReceiver" -a app.prayertimes.azan.ACTION_DHIKR >/dev/null
+adb shell am broadcast -n "$PKG/.DhikrReceiver" -a app.prayertimes.azan.ACTION_AZKAR --es kind EVENING >/dev/null
+sleep 2
+adb shell cmd statusbar expand-notifications
+shot 11-notifications 3
+adb shell cmd statusbar collapse
+
 adb logcat -d -b crash > "$OUT/crash-log.txt" || true
 if grep -q "$PKG" "$OUT/crash-log.txt"; then echo "APP CRASHED:"; cat "$OUT/crash-log.txt"; exit 1; fi
 rm -f "$OUT/crash-log.txt"

@@ -79,6 +79,9 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
             locationPermission.launch(arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION))
             true
         }
+        findPreference<Preference>("open_azkar")?.setOnPreferenceClickListener {
+            startActivity(Intent(requireContext(), AzkarActivity::class.java)); true
+        }
         findPreference<Preference>("manage_audio")?.setOnPreferenceClickListener {
             startActivity(Intent(requireContext(), AudioActivity::class.java)); true
         }
@@ -133,6 +136,7 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
             }
         }
         AzanScheduler.schedule(requireContext())
+        DhikrScheduler.schedule(requireContext())
     }
 
     private fun applyLocation(lat: Double, lng: Double, name: String, tz: String) {

@@ -31,6 +31,17 @@
         <Preference app:key="test_azan" app:title="@string/test_azan" app:summary="@string/test_azan_summary" />
     </PreferenceCategory>
 
+    <PreferenceCategory app:title="@string/cat_azkar">
+        <Preference app:key="open_azkar" app:title="@string/open_azkar" />
+        <SwitchPreferenceCompat app:key="azkar_reminders" app:title="@string/azkar_reminders"
+            app:summary="@string/azkar_reminders_summary" app:defaultValue="true" />
+        <SwitchPreferenceCompat app:key="dhikr_notifications" app:title="@string/dhikr_notifications" app:defaultValue="true"
+            app:summaryOn="@string/dhikr_notifications_on" app:summaryOff="@string/dhikr_notifications_off" />
+        <ListPreference app:key="dhikr_interval" app:title="@string/dhikr_interval" app:defaultValue="2"
+            app:dependency="dhikr_notifications" app:entries="@array/dhikr_interval_entries"
+            app:entryValues="@array/dhikr_interval_values" app:useSimpleSummaryProvider="true" />
+    </PreferenceCategory>
+
     <PreferenceCategory app:title="@string/cat_adjust">
         <EditTextPreference app:key="adjust_fajr" app:title="الفجر" app:defaultValue="0" app:useSimpleSummaryProvider="true" />
         <EditTextPreference app:key="adjust_sunrise" app:title="الشروق" app:defaultValue="0" app:useSimpleSummaryProvider="true" />
