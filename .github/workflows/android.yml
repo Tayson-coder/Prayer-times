@@ -21,13 +21,18 @@ jobs:
           distribution: temurin
           java-version: "17"
       - uses: gradle/actions/setup-gradle@v4
-      - name: Check azan download links
+      - name: Bundle azan voices into the app
         run: |
-          grep -o 'athan("[^"]*")' app/src/main/java/app/prayertimes/azan/Data.kt | sed 's/athan("//; s/")$//' | while read -r f; do
-            url="https://raw.githubusercontent.com/abodehq/Athan-MP3/cf1a9dd4f1e5e10009439099c5af74479ad332c0/Sounds/${f// /%20}"
-            size=$(curl -fsSL -o /dev/null -w '%{size_download}' "$url") || { echo "BROKEN: $f"; exit 1; }
-            echo "OK $size bytes: $f"
-          done
+          mkdir -p app/src/main/res/raw
+          grep -o 'Muezzin("[a-z0-9_]*".*athan("[^"]*")' app/src/main/java/app/prayertimes/azan/Data.kt \
+            | sed -E 's/^Muezzin\("([a-z0-9_]+)".*athan\("([^"]+)"\)$/\1|\2/' | while IFS='|' read -r id f; do
+              url="https://raw.githubusercontent.com/abodehq/Athan-MP3/cf1a9dd4f1e5e10009439099c5af74479ad332c0/Sounds/${f// /%20}"
+              curl -fsSL --retry 3 -o "app/src/main/res/raw/$id.mp3" "$url" || { echo "BROKEN: $id ($f)"; exit 1; }
+              echo "OK $id <- $f ($(stat -c %s "app/src/main/res/raw/$id.mp3") bytes)"
+            done
+          count=$(ls app/src/main/res/raw/*.mp3 | wc -l)
+          echo "Bundled $count voices"
+          test "$count" -ge 14
       - name: Unit tests
         run: ./gradlew --no-daemon testDebugUnitTest
       - name: Build APK

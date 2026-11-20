@@ -4,3 +4,6 @@ local.properties
 *.iml
 .idea/
 captures/
+
+# أصوات الأذان يضيفها البناء على GitHub تلقائياً
+app/src/main/res/raw/*.mp3
