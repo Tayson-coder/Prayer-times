@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">مواقيت الصلاة</string>
+    <string name="settings">الإعدادات</string>
+    <string name="next_prayer">الصلاة القادمة</string>
+    <string name="muezzin">المؤذن</string>
+    <string name="listen">▶ استماع</string>
+    <string name="stop">■ إيقاف</string>
+    <string name="stop_azan">إيقاف الأذان</string>
+    <string name="azan_now">حان الآن موعد أذان %1$s</string>
+    <string name="azan_on">أذان %1$s مفعّل</string>
+    <string name="azan_off">أذان %1$s متوقف</string>
+    <string name="channel_name">الأذان</string>
+    <string name="channel_desc">رفع الأذان عند دخول وقت الصلاة</string>
+    <string name="manage_audio">أصوات المؤذنين</string>
+    <string name="source_is">مصدر الصوت: %1$s</string>
+    <string name="no_audio_yet">لا يوجد ملف صوتي لهذا المؤذن بعد. أضفه من «أصوات المؤذنين»، وحتى ذلك الحين تُستخدم نغمة المنبّه.</string>
+    <string name="no_audio">لا يوجد صوت</string>
+    <string name="pick_file">اختيار ملف</string>
+    <string name="link">رابط</string>
+    <string name="delete">حذف</string>
+    <string name="save">حفظ</string>
+    <string name="cancel">إلغاء</string>
+    <string name="url_hint">رابط مباشر لملف MP3</string>
+    <string name="bad_url">الرابط يجب أن يبدأ بـ http أو https</string>
+    <string name="file_saved">تم حفظ الملف</string>
+    <string name="file_failed">تعذّر حفظ الملف</string>
+    <string name="audio_help">اختر ملف الأذان (MP3) لكل مؤذن من جهازك، أو ضع رابطاً مباشراً لملف صوتي. الملفات تُحفظ داخل التطبيق.</string>
+    <string name="warn_exact">اسمح للتطبيق بالمنبّهات الدقيقة حتى يُرفع الأذان في وقته بالضبط.</string>
+    <string name="warn_notifications">الإشعارات متوقفة، فلن يظهر زر إيقاف الأذان على الشاشة.</string>
+    <string name="fix">إصلاح</string>
+
+    <!-- الإعدادات -->
+    <string name="cat_location">الموقع</string>
+    <string name="use_gps">تحديد موقعي تلقائياً</string>
+    <string name="current_location">الموقع الحالي: %1$s</string>
+    <string name="city">اختر مدينة</string>
+    <string name="lat">خط العرض</string>
+    <string name="lng">خط الطول</string>
+    <string name="cat_method">طريقة الحساب</string>
+    <string name="method">الجهة</string>
+    <string name="asr">حساب العصر</string>
+    <string name="cat_azan">الأذان</string>
+    <string name="fajr_muezzin">مؤذن الفجر</string>
+    <string name="same_muezzin">نفس المؤذن المختار</string>
+    <string name="volume">مستوى الصوت</string>
+    <string name="enable_fajr">أذان الفجر</string>
+    <string name="enable_dhuhr">أذان الظهر</string>
+    <string name="enable_asr">أذان العصر</string>
+    <string name="enable_maghrib">أذان المغرب</string>
+    <string name="enable_isha">أذان العشاء</string>
+    <string name="test_azan">تجربة الأذان الآن</string>
+    <string name="test_azan_summary">يشغّل الأذان كما سيُرفع في وقت الصلاة</string>
+    <string name="cat_adjust">تعديل يدوي (بالدقائق)</string>
+    <string name="cat_reliability">لضمان رفع الأذان في وقته</string>
+    <string name="exact_alarm">المنبّهات الدقيقة</string>
+    <string name="exact_ok">مسموح ✓</string>
+    <string name="exact_missing">غير مسموح — اضغط للسماح</string>
+    <string name="battery">استثناء التطبيق من توفير البطارية</string>
+    <string name="battery_summary">بعض الأجهزة (شاومي، هواوي، أوبو…) توقف التطبيقات في الخلفية. اختر «مواقيت الصلاة» واجعله «غير محسَّن».</string>
+    <string name="choose_location_first">اختر موقعك أولاً لحساب المواقيت</string>
+    <string name="location_denied">لم يُسمح بالوصول للموقع. اختر مدينتك من القائمة.</string>
+    <string name="location_off">خدمة الموقع متوقفة. فعّلها أو اختر مدينتك.</string>
+    <string name="location_failed">تعذّر تحديد الموقع. اختر مدينتك من القائمة.</string>
+    <string name="locating">جارٍ تحديد الموقع…</string>
+    <string name="location_saved">تم حفظ الموقع</string>
+    <string name="my_location">موقعي الحالي</string>
+    <string name="bad_coords">إحداثيات غير صحيحة</string>
+
+    <string-array name="asr_entries">
+        <item>الجمهور (شافعي، مالكي، حنبلي)</item>
+        <item>الحنفي</item>
+    </string-array>
+    <string-array name="asr_values">
+        <item>standard</item>
+        <item>hanafi</item>
+    </string-array>
+</resources>
