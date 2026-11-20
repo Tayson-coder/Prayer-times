@@ -55,7 +55,11 @@
     <string name="cat_azan">الأذان</string>
     <string name="fajr_muezzin">مؤذن الفجر</string>
     <string name="same_muezzin">نفس المؤذن المختار</string>
-    <string name="volume">مستوى الصوت</string>
+    <string name="volume">مستوى صوت الأذان</string>
+    <string name="volume_summary">نسبة من صوت الموبايل. أزرار الصوت في الموبايل تعلّي وتوطّي الأذان كمان.</string>
+    <string name="alarm_stream">رفع الأذان على صوت المنبّه</string>
+    <string name="alarm_stream_off">متوقف: الأذان يتبع صوت الوسائط في الموبايل وأزرار الصوت</string>
+    <string name="alarm_stream_on">مفعّل: الأذان على صوت المنبّه، فيشتغل حتى لو صوت الوسائط مكتوم</string>
     <string name="enable_fajr">أذان الفجر</string>
     <string name="enable_dhuhr">أذان الظهر</string>
     <string name="enable_asr">أذان العصر</string>

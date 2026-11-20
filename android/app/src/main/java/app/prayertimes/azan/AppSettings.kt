@@ -21,7 +21,9 @@ class AppSettings(context: Context) {
     val hanafiAsr: Boolean get() = prefs.getString(KEY_ASR, "standard") == "hanafi"
     val muezzin: String get() = prefs.getString(KEY_MUEZZIN, MUEZZINS[0].id) ?: MUEZZINS[0].id
     val fajrMuezzin: String get() = prefs.getString(KEY_FAJR_MUEZZIN, DEFAULT_FAJR) ?: DEFAULT_FAJR
-    val volume: Float get() = prefs.getInt(KEY_VOLUME, 90) / 100f
+    val volume: Float get() = prefs.getInt(KEY_VOLUME, 100) / 100f
+    /** true: صوت المنبّه (يعمل حتى لو الوسائط مكتومة). false: يتبع صوت الوسائط وأزرار الصوت */
+    val useAlarmStream: Boolean get() = prefs.getBoolean(KEY_ALARM_STREAM, false)
 
     fun location() = PrayerSchedule.Location(lat, lng, zone, method, hanafiAsr, adjustments)
 
@@ -63,5 +65,6 @@ class AppSettings(context: Context) {
         const val KEY_MUEZZIN = "muezzin"
         const val KEY_FAJR_MUEZZIN = "fajr_muezzin"
         const val KEY_VOLUME = "volume"
+        const val KEY_ALARM_STREAM = "alarm_stream"
     }
 }

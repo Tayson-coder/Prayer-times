@@ -2,7 +2,10 @@ package app.prayertimes.azan
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.SharedPreferences
 import android.media.AudioAttributes
+import android.media.AudioFocusRequest
+import android.media.AudioManager
 import android.media.MediaPlayer
 import android.media.RingtoneManager
 import android.net.Uri
@@ -46,15 +49,27 @@ object AzanAudio {
     fun describe(ctx: Context, id: String): String? = sources(ctx, id, includeFallback = false).firstOrNull()?.label
 }
 
-/** يشغّل الأذان مع الانتقال تلقائياً للمصدر التالي عند الفشل */
+/**
+ * يشغّل الأذان مع الانتقال تلقائياً للمصدر التالي عند الفشل.
+ * الصوت يتبع «صوت الوسائط» في الموبايل (وأزرار الصوت) إلا إذا اختار المستخدم صوت المنبّه،
+ * ومستوى الصوت في الإعدادات نسبة من صوت الموبايل ويتغير فوراً أثناء التشغيل.
+ */
 class AzanPlayer(private val ctx: Context) {
     private val handler = Handler(Looper.getMainLooper())
+    private val settings = AppSettings(ctx)
+    private val audioManager = ctx.getSystemService(AudioManager::class.java)
     private var player: MediaPlayer? = null
     private var queue = ArrayDeque<AzanAudio.Source>()
     private var onFinished: (() -> Unit)? = null
     private var onStarted: ((AzanAudio.Source) -> Unit)? = null
+    private var focusRequest: AudioFocusRequest? = null
     private val timeout = Runnable { Log.w(TAG, "source timed out"); next() }
     private val fallbackLimit = Runnable { finish() }
+
+    // تغيير مستوى الصوت من الإعدادات يُطبَّق فوراً على الأذان الجاري
+    private val prefListener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
+        if (key == AppSettings.KEY_VOLUME) applyVolume()
+    }
 
     val isPlaying: Boolean get() = player != null
 
@@ -63,22 +78,45 @@ class AzanPlayer(private val ctx: Context) {
         this.onStarted = onStarted
         this.onFinished = onFinished
         queue = ArrayDeque(AzanAudio.sources(ctx, muezzinId))
+        settings.prefs.registerOnSharedPreferenceChangeListener(prefListener)
+        requestFocus()
         next()
+    }
+
+    private fun attributes(): AudioAttributes = AudioAttributes.Builder()
+        .setUsage(if (settings.useAlarmStream) AudioAttributes.USAGE_ALARM else AudioAttributes.USAGE_MEDIA)
+        .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+        .build()
+
+    /** يوقف الموسيقى/الفيديو مؤقتاً أثناء الأذان ثم يعيدها */
+    private fun requestFocus() {
+        val req = AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN_TRANSIENT)
+            .setAudioAttributes(attributes())
+            .setOnAudioFocusChangeListener { }
+            .build()
+        focusRequest = req
+        runCatching { audioManager.requestAudioFocus(req) }
+    }
+
+    private fun abandonFocus() {
+        focusRequest?.let { runCatching { audioManager.abandonAudioFocusRequest(it) } }
+        focusRequest = null
+    }
+
+    /** منحنى تربيعي حتى يكون تخفيض الصوت محسوساً بشكل طبيعي */
+    private fun applyVolume() {
+        val v = settings.volume.coerceIn(0f, 1f)
+        val scaled = v * v
+        runCatching { player?.setVolume(scaled, scaled) }
     }
 
     private fun next() {
         release()
         val src = queue.removeFirstOrNull() ?: return finish()
-        val volume = AppSettings(ctx).volume
         val mp = MediaPlayer()
         player = mp
         try {
-            mp.setAudioAttributes(
-                AudioAttributes.Builder()
-                    .setUsage(AudioAttributes.USAGE_ALARM)
-                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                    .build(),
-            )
+            mp.setAudioAttributes(attributes())
             when (src) {
                 is AzanAudio.Source.FilePath -> mp.setDataSource(src.file.absolutePath)
                 is AzanAudio.Source.Url -> mp.setDataSource(src.url)
@@ -88,7 +126,7 @@ class AzanPlayer(private val ctx: Context) {
             }
             mp.setOnPreparedListener {
                 handler.removeCallbacks(timeout)
-                it.setVolume(volume, volume)
+                applyVolume()
                 it.start()
                 onStarted?.invoke(src)
                 // نغمة المنبّه قد تكون طويلة أو متكررة: نوقفها بعد 30 ثانية
@@ -109,8 +147,7 @@ class AzanPlayer(private val ctx: Context) {
     }
 
     private fun finish() {
-        release()
-        queue.clear()
+        cleanup()
         val cb = onFinished
         onFinished = null
         cb?.invoke()
@@ -126,10 +163,16 @@ class AzanPlayer(private val ctx: Context) {
         player = null
     }
 
+    private fun cleanup() {
+        release()
+        queue.clear()
+        abandonFocus()
+        settings.prefs.unregisterOnSharedPreferenceChangeListener(prefListener)
+    }
+
     fun stop() {
         onFinished = null
-        queue.clear()
-        release()
+        cleanup()
     }
 
     companion object { private const val TAG = "AzanPlayer" }

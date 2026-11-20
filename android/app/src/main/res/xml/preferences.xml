@@ -19,7 +19,10 @@
         <ListPreference app:key="muezzin" app:title="@string/muezzin" app:defaultValue="abdulbasit" app:useSimpleSummaryProvider="true" />
         <ListPreference app:key="fajr_muezzin" app:title="@string/fajr_muezzin" app:defaultValue="malekfajr" app:useSimpleSummaryProvider="true" />
         <Preference app:key="manage_audio" app:title="@string/manage_audio" />
-        <SeekBarPreference app:key="volume" app:title="@string/volume" app:defaultValue="90" android:max="100" app:showSeekBarValue="true" />
+        <SeekBarPreference app:key="volume" app:title="@string/volume" app:summary="@string/volume_summary"
+            app:defaultValue="100" android:max="100" app:showSeekBarValue="true" app:updatesContinuously="true" />
+        <SwitchPreferenceCompat app:key="alarm_stream" app:title="@string/alarm_stream" app:defaultValue="false"
+            app:summaryOff="@string/alarm_stream_off" app:summaryOn="@string/alarm_stream_on" />
         <SwitchPreferenceCompat app:key="enabled_fajr" app:title="@string/enable_fajr" app:defaultValue="true" />
         <SwitchPreferenceCompat app:key="enabled_dhuhr" app:title="@string/enable_dhuhr" app:defaultValue="true" />
         <SwitchPreferenceCompat app:key="enabled_asr" app:title="@string/enable_asr" app:defaultValue="true" />

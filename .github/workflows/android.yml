@@ -24,15 +24,14 @@ jobs:
       - name: Bundle azan voices into the app
         run: |
           mkdir -p app/src/main/res/raw
-          grep -o 'Muezzin("[a-z0-9_]*".*athan("[^"]*")' app/src/main/java/app/prayertimes/azan/Data.kt \
-            | sed -E 's/^Muezzin\("([a-z0-9_]+)".*athan\("([^"]+)"\)$/\1|\2/' | while IFS='|' read -r id f; do
-              url="https://raw.githubusercontent.com/abodehq/Athan-MP3/cf1a9dd4f1e5e10009439099c5af74479ad332c0/Sounds/${f// /%20}"
-              curl -fsSL --retry 3 -o "app/src/main/res/raw/$id.mp3" "$url" || { echo "BROKEN: $id ($f)"; exit 1; }
-              echo "OK $id <- $f ($(stat -c %s "app/src/main/res/raw/$id.mp3") bytes)"
-            done
+          python3 scripts/voice_urls.py app/src/main/java/app/prayertimes/azan/Data.kt > voices.tsv
+          while IFS=$'\t' read -r id url; do
+            curl -fsSL --retry 3 -o "app/src/main/res/raw/$id.mp3" "$url" || { echo "BROKEN: $id $url"; exit 1; }
+            echo "OK $id ($(stat -c %s "app/src/main/res/raw/$id.mp3") bytes)"
+          done < voices.tsv
           count=$(ls app/src/main/res/raw/*.mp3 | wc -l)
           echo "Bundled $count voices"
-          test "$count" -ge 14
+          test "$count" -eq "$(wc -l < voices.tsv)"
       - name: Unit tests
         run: ./gradlew --no-daemon testDebugUnitTest
       - name: Build APK

@@ -22,10 +22,15 @@ enum class Prayer(val key: String, val arabic: String, val hasAzan: Boolean) {
  */
 data class Muezzin(val id: String, val name: String, val note: String, val url: String? = null)
 
-/** تسجيلات عامة على GitHub (المستودع abodehq/Athan-MP3، مثبّتة على نسخة محددة) */
+private fun enc(file: String) = java.net.URLEncoder.encode(file, "UTF-8").replace("+", "%20")
+
+/** تسجيلات عامة على GitHub: المستودع abodehq/Athan-MP3 (مثبّت على نسخة محددة) */
 private fun athan(file: String) =
-    "https://raw.githubusercontent.com/abodehq/Athan-MP3/cf1a9dd4f1e5e10009439099c5af74479ad332c0/Sounds/" +
-        file.replace(" ", "%20")
+    "https://raw.githubusercontent.com/abodehq/Athan-MP3/cf1a9dd4f1e5e10009439099c5af74479ad332c0/Sounds/" + enc(file)
+
+/** تسجيلات عامة على GitHub: المستودع Kiwifu/adhan-mp3 (مثبّت على نسخة محددة) */
+private fun kiwi(file: String) =
+    "https://raw.githubusercontent.com/Kiwifu/adhan-mp3/b9180a2bb769f74cff8e378ef2cc7aaf8db5cd5b/" + enc(file)
 
 val MUEZZINS = listOf(
     Muezzin("abdulbasit", "الشيخ عبد الباسط عبد الصمد", "أذان القاهرة", athan("Athan Abed Albase6.mp3")),
@@ -42,15 +47,19 @@ val MUEZZINS = listOf(
     Muezzin("deghreri", "الشيخ حمد دغريري", "السعودية", athan("Athan Hamad Deghreri.mp3")),
     Muezzin("malki", "الشيخ حمدان المالكي", "مسجد الملك فهد بنجران", athan("Athan Hamdan Almalki.mp3")),
     Muezzin("suhaib", "الشيخ صهيب هاني", "فلسطين", athan("Athan Suhaib Khatba.mp3")),
+    Muezzin("tobar", "الشيخ نصر الدين طوبار", "مصر", kiwi("Nasreddine_Toubar_(نصر_الدين_طوبار).mp3")),
+    Muezzin("tobarfajr", "الشيخ نصر الدين طوبار — الفجر", "أذان الفجر", kiwi("Fajr_Adhan_by_Nasreddine_Toubar_(اذان_الفجر_بصوت_نصر_الدين_طوبار).mp3")),
+    Muezzin("husary", "الشيخ محمود خليل الحصري", "أذان القاهرة", kiwi("Mahmoud_Khalil_Al_Hussary_-_Cairo_(محمود_خليل_الحصري_-_القاهرة).mp3")),
+    Muezzin("banna", "الشيخ محمود علي البنا", "أذان القاهرة", kiwi("Mahmoud_Ali_Al_Banna_-_Cairo_(محمود_علي_البنا_-_القاهرة).mp3")),
+    Muezzin("mustafaismail", "الشيخ مصطفى إسماعيل", "مصر", kiwi("Mustafa_Ismail_-_Egypt_(مصطفى_إسماعيل_-_مصر).mp3")),
+    Muezzin("mulla", "الشيخ علي أحمد ملا", "مؤذن الحرم المكي", kiwi("Ali_Ibn_Ahmad_Mala_1_-_Al_Haram_Al_Maki_(علي_بن_أحمد_ملا_-_الحرم_المكي).mp3")),
+    Muezzin("hadrawi", "الشيخ فاروق حضراوي", "مؤذن الحرم المكي", kiwi("Faruq_Abdul_Rahman_Hadrawe_-_Al_Haram_Al_Maki_(فاروق_عبدالرحمن_حضراوي_-_الحرم_المكي).mp3")),
+    Muezzin("madani", "أذان الحرم النبوي", "المدينة المنورة", kiwi("Adhan_Al_Haram_Al_Madani_-_Al_Madinah_1_(أذان_الحرم_المدني_-_المدينة_المنورة).mp3")),
+    Muezzin("abdulmajeed", "الشيخ عبد المجيد السريحي", "مؤذن المسجد النبوي", kiwi("Abdul_Majid_Al_Surehi_1_(عبدالمجيد_السريحي).mp3")),
+    Muezzin("aqsa", "أذان المسجد الأقصى", "القدس", kiwi("Adhan_Al_Aqsa_-_Jerusalem_(أذان_المسجد_الأقصى_-_القدس).mp3")),
+    Muezzin("dosari", "الشيخ ياسر الدوسري", "السعودية", kiwi("Yasser_Al-Dosari_-_Saudi_Arabia_(ياسر_الدوسري_-_المملكة_العربية_السعودية).mp3")),
     // بدون مصدر عام: يضيف المستخدم الملف بنفسه
-    Muezzin("tobar", "الشيخ نصر الدين طوبار", "مصر — أضف الملف بنفسك"),
-    Muezzin("husary", "الشيخ محمود خليل الحصري", "مصر — أضف الملف بنفسك"),
-    Muezzin("banna", "الشيخ محمود علي البنا", "مصر — أضف الملف بنفسك"),
-    Muezzin("mulla", "الشيخ علي أحمد ملا", "الحرم المكي — أضف الملف بنفسك"),
-    Muezzin("hadrawi", "الشيخ فاروق حضراوي", "الحرم المكي — أضف الملف بنفسك"),
     Muezzin("bukhari", "الشيخ عصام بخاري", "المسجد النبوي — أضف الملف بنفسك"),
-    Muezzin("abdulmajeed", "الشيخ عبد المجيد السريحي", "المسجد النبوي — أضف الملف بنفسك"),
-    Muezzin("aqsa", "أذان المسجد الأقصى", "القدس — أضف الملف بنفسك"),
 )
 
 fun muezzinById(id: String?): Muezzin = MUEZZINS.firstOrNull { it.id == id } ?: MUEZZINS[0]

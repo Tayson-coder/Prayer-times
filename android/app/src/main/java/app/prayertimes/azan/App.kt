@@ -1,6 +1,7 @@
 package app.prayertimes.azan
 
 import android.app.Application
+import android.media.AudioManager
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -20,6 +21,8 @@ open class BaseActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.decorView.layoutDirection = View.LAYOUT_DIRECTION_RTL
+        // أزرار الصوت داخل التطبيق تتحكم في صوت الوسائط (صوت الأذان)
+        volumeControlStream = AudioManager.STREAM_MUSIC
     }
 
     override fun onSupportNavigateUp(): Boolean {
