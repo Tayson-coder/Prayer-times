@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <PreferenceCategory app:title="@string/cat_prayer">
+        <Preference app:key="use_gps" app:title="@string/use_gps" />
+        <ListPreference app:key="city" app:title="@string/city" app:useSimpleSummaryProvider="true" />
+        <ListPreference app:key="method" app:title="@string/method" app:defaultValue="egypt" app:useSimpleSummaryProvider="true" />
+        <ListPreference app:key="asr" app:title="@string/asr" app:defaultValue="standard"
+            app:entries="@array/asr_entries" app:entryValues="@array/asr_values" app:useSimpleSummaryProvider="true" />
+        <SwitchPreferenceCompat app:key="prayer_alerts" app:title="@string/prayer_alerts"
+            app:summary="@string/prayer_alerts_summary" app:defaultValue="true" />
+    </PreferenceCategory>
+
     <PreferenceCategory app:title="@string/cat_reminders">
         <SwitchPreferenceCompat app:key="remind_morning" app:title="@string/remind_morning" app:defaultValue="true" />
         <Preference app:key="morning_time" app:title="@string/morning_time" app:dependency="remind_morning" />

@@ -17,6 +17,12 @@ object Reminders {
     const val ACTION_DHIKR = "app.azkar.DHIKR"
     const val ACTION_STOP_REMIND = "app.azkar.STOP_REMIND"
     const val ACTION_STOP_DHIKR = "app.azkar.STOP_DHIKR"
+    const val ACTION_PRAYER = "app.azkar.PRAYER"
+    const val ACTION_STOP_PRAYER = "app.azkar.STOP_PRAYER"
+    const val EXTRA_PRAYER = "prayer"
+    const val EXTRA_AT = "at"
+    const val CHANNEL_PRAYER = "prayer"
+    const val ID_PRAYER = 4000
     const val EXTRA_KIND = "kind"
     const val CHANNEL_REMIND = "remind"
     const val CHANNEL_DHIKR = "dhikr"
@@ -35,6 +41,27 @@ object Reminders {
     fun scheduleAll(ctx: Context) {
         AzkarKind.entries.forEach { scheduleReminder(ctx, it) }
         scheduleDhikr(ctx)
+        schedulePrayer(ctx)
+    }
+
+    fun canExact(ctx: Context): Boolean =
+        android.os.Build.VERSION.SDK_INT < 31 || ctx.getSystemService(AlarmManager::class.java).canScheduleExactAlarms()
+
+    /** تنبيه (بصوت إشعار الجهاز، بدون أذان) عند دخول وقت الصلاة القادمة */
+    fun schedulePrayer(ctx: Context, after: Instant = Instant.now()) {
+        val am = ctx.getSystemService(AlarmManager::class.java)
+        val s = Settings(ctx)
+        val base = Intent(ctx, ReminderReceiver::class.java).setAction(ACTION_PRAYER)
+        val flags = PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        if (!s.prayerAlerts || !s.hasLocation) { am.cancel(PendingIntent.getBroadcast(ctx, 50, base, flags)); return }
+        val (prayer, at) = PrayerSchedule.nextPrayer(s.location(), after)
+        val pi = PendingIntent.getBroadcast(ctx, 50, base.putExtra(EXTRA_PRAYER, prayer.key).putExtra(EXTRA_AT, at.toEpochMilli()), flags)
+        try {
+            if (canExact(ctx)) am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, at.toEpochMilli(), pi)
+            else am.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, at.toEpochMilli(), pi)
+        } catch (e: SecurityException) {
+            am.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, at.toEpochMilli(), pi)
+        }
     }
 
     fun scheduleReminder(ctx: Context, kind: AzkarKind, after: Instant = Instant.now()) {
@@ -59,6 +86,10 @@ object Reminders {
         nm.createNotificationChannel(
             NotificationChannel(CHANNEL_REMIND, ctx.getString(R.string.channel_remind), NotificationManager.IMPORTANCE_DEFAULT)
                 .apply { description = ctx.getString(R.string.channel_remind_desc) },
+        )
+        nm.createNotificationChannel(
+            NotificationChannel(CHANNEL_PRAYER, ctx.getString(R.string.channel_prayer), NotificationManager.IMPORTANCE_HIGH)
+                .apply { description = ctx.getString(R.string.channel_prayer_desc) },
         )
         nm.createNotificationChannel(
             NotificationChannel(CHANNEL_DHIKR, ctx.getString(R.string.channel_dhikr), NotificationManager.IMPORTANCE_LOW)
@@ -93,6 +124,18 @@ class ReminderReceiver : BroadcastReceiver() {
                 nm.cancel(Reminders.ID_DHIKR)
                 Reminders.scheduleDhikr(ctx)
             }
+            Reminders.ACTION_PRAYER -> {
+                val prayer = Prayer.fromKey(intent.getStringExtra(Reminders.EXTRA_PRAYER))
+                val at = intent.getLongExtra(Reminders.EXTRA_AT, 0L)
+                val now = System.currentTimeMillis()
+                if (prayer != null && s.prayerAlerts && now - at in -60_000L..600_000L) notifyPrayer(ctx, prayer)
+                Reminders.schedulePrayer(ctx, Instant.ofEpochMilli(maxOf(now, at) + 1000))
+            }
+            Reminders.ACTION_STOP_PRAYER -> {
+                s.prefs.edit().putBoolean(Settings.K_PRAYER_ALERTS, false).apply()
+                nm.cancel(Reminders.ID_PRAYER)
+                Reminders.schedulePrayer(ctx)
+            }
             // BOOT_COMPLETED / TIME_SET / TIMEZONE_CHANGED / MY_PACKAGE_REPLACED
             else -> Reminders.scheduleAll(ctx)
         }
@@ -113,6 +156,24 @@ class ReminderReceiver : BroadcastReceiver() {
             .addAction(0, ctx.getString(R.string.stop_reminder), Reminders.stopIntent(ctx, Reminders.ACTION_STOP_REMIND, 30 + kind.ordinal, kind))
             .build()
         runCatching { NotificationManagerCompat.from(ctx).notify(Reminders.notificationId(kind), n) }
+    }
+
+    private fun notifyPrayer(ctx: Context, prayer: Prayer) {
+        val open = PendingIntent.getActivity(
+            ctx, 60, Intent(ctx, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+        )
+        val n = NotificationCompat.Builder(ctx, Reminders.CHANNEL_PRAYER)
+            .setSmallIcon(R.drawable.ic_notification)
+            .setContentTitle(ctx.getString(R.string.prayer_time_now, prayer.arabic))
+            .setContentText(Settings(ctx).locationName)
+            .setCategory(NotificationCompat.CATEGORY_REMINDER)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setContentIntent(open)
+            .setAutoCancel(true)
+            .addAction(0, ctx.getString(R.string.stop_prayer_alerts), Reminders.stopIntent(ctx, Reminders.ACTION_STOP_PRAYER, 61))
+            .build()
+        runCatching { NotificationManagerCompat.from(ctx).notify(Reminders.ID_PRAYER, n) }
     }
 
     private fun notifyDhikr(ctx: Context) {

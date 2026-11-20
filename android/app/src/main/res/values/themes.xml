@@ -40,14 +40,14 @@
         <item name="android:background">@android:color/transparent</item>
     </style>
     <style name="Text.ToolbarTitle" parent="TextAppearance.Material3.TitleLarge">
-        <item name="fontFamily">@font/amiri_bold</item>
-        <item name="android:fontFamily">@font/amiri_bold</item>
+        <item name="fontFamily">@font/scheherazade_bold</item>
+        <item name="android:fontFamily">@font/scheherazade_bold</item>
         <item name="android:textSize">23sp</item>
         <item name="android:textColor">@color/ink</item>
     </style>
     <style name="Text.Title" parent="TextAppearance.Material3.TitleLarge">
-        <item name="fontFamily">@font/amiri_bold</item>
-        <item name="android:fontFamily">@font/amiri_bold</item>
+        <item name="fontFamily">@font/scheherazade_bold</item>
+        <item name="android:fontFamily">@font/scheherazade_bold</item>
     </style>
     <style name="Text.TitleMedium" parent="TextAppearance.Material3.TitleMedium">
         <item name="fontFamily">@font/plex_medium</item>

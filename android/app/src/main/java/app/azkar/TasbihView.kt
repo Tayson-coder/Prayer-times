@@ -48,8 +48,12 @@ class TasbihView @JvmOverloads constructor(ctx: Context, attrs: AttributeSet? = 
     private var markerPos = 0f
     private var animator: ValueAnimator? = null
 
-    fun set(remaining: Int, taps: Int, animate: Boolean) {
+    private var done = false
+
+    /** number: الرقم المعروض في المنتصف. done: إظهار علامة الصح بدل الرقم */
+    fun set(remaining: Int, taps: Int, animate: Boolean, done: Boolean = remaining == 0) {
         this.remaining = remaining
+        this.done = done
         val target = (taps % beads).toFloat()
         animator?.cancel()
         if (animate) {
@@ -64,7 +68,7 @@ class TasbihView @JvmOverloads constructor(ctx: Context, attrs: AttributeSet? = 
             markerPos = target
             invalidate()
         }
-        contentDescription = if (remaining == 0) context.getString(R.string.dhikr_done)
+        contentDescription = if (done) context.getString(R.string.dhikr_done)
         else context.getString(R.string.dhikr_left, remaining.toString())
     }
 
@@ -93,12 +97,17 @@ class TasbihView @JvmOverloads constructor(ctx: Context, attrs: AttributeSet? = 
         marker.shader = RadialGradient(mx - r * 0.4f, my - r * 0.4f, r * 2f, 0xFFE9B985.toInt(), markerColor, Shader.TileMode.CLAMP)
         canvas.drawCircle(mx, my, r * 1.45f, marker)
 
-        if (remaining == 0) {
+        if (done) {
             val s = size * 0.1f
             val p = Path().apply { moveTo(cx - s, cy); lineTo(cx - s * 0.25f, cy + s * 0.75f); lineTo(cx + s * 1.1f, cy - s * 0.7f) }
             canvas.drawPath(p, check)
         } else {
-            number.textSize = if (remaining >= 100) size * 0.2f else size * 0.25f
+            number.textSize = when {
+                remaining >= 10000 -> size * 0.13f
+                remaining >= 1000 -> size * 0.16f
+                remaining >= 100 -> size * 0.2f
+                else -> size * 0.25f
+            }
             canvas.drawText(remaining.toString(), cx, cy - (number.ascent() + number.descent()) / 2f, number)
         }
     }

@@ -58,8 +58,22 @@ class Settings(ctx: Context) {
     val eveningTime: LocalTime get() = AzkarTimes.parseTime(prefs.getString(K_EVENING_TIME, null), LocalTime.of(17, 0))
     val dhikrNotifications get() = prefs.getBoolean(K_DHIKR, true)
     val dhikrInterval get() = prefs.getString(K_DHIKR_INTERVAL, "2")?.toIntOrNull() ?: 2
-    val textSizeSp: Float get() = when (prefs.getString(K_TEXT_SIZE, "medium")) { "small" -> 24f; "large" -> 34f; "xlarge" -> 40f; else -> 29f }
+    val textSizeSp: Float get() = when (prefs.getString(K_TEXT_SIZE, "medium")) { "small" -> 26f; "large" -> 36f; "xlarge" -> 42f; else -> 31f }
     val vibrate get() = prefs.getBoolean(K_VIBRATE, true)
+
+    // مواقيت الصلاة
+    val hasLocation get() = prefs.contains(K_LAT)
+    val lat get() = prefs.getString(K_LAT, null)?.toDoubleOrNull() ?: CITIES[0].lat
+    val lng get() = prefs.getString(K_LNG, null)?.toDoubleOrNull() ?: CITIES[0].lng
+    val locationName: String get() = prefs.getString(K_LOCATION_NAME, null) ?: CITIES[0].name
+    val prayerZone: ZoneId get() = runCatching { ZoneId.of(prefs.getString(K_TZ, null) ?: CITIES[0].tz) }.getOrDefault(ZoneId.systemDefault())
+    val method get() = prefs.getString(K_METHOD, "egypt") ?: "egypt"
+    val hanafiAsr get() = prefs.getString(K_ASR, "standard") == "hanafi"
+    val prayerAlerts get() = prefs.getBoolean(K_PRAYER_ALERTS, true)
+    fun location() = PrayerSchedule.Location(lat, lng, prayerZone, method, hanafiAsr, emptyMap())
+    fun setLocation(lat: Double, lng: Double, name: String, tz: String) = prefs.edit()
+        .putString(K_LAT, lat.toString()).putString(K_LNG, lng.toString())
+        .putString(K_LOCATION_NAME, name).putString(K_TZ, tz).apply()
     val autoAdvance get() = prefs.getBoolean(K_AUTO_ADVANCE, true)
 
     fun reminderOn(kind: AzkarKind) = if (kind == AzkarKind.MORNING) remindMorning else remindEvening
@@ -77,6 +91,14 @@ class Settings(ctx: Context) {
         const val K_TEXT_SIZE = "text_size"
         const val K_VIBRATE = "vibrate"
         const val K_AUTO_ADVANCE = "auto_advance"
+        const val K_LAT = "lat"
+        const val K_LNG = "lng"
+        const val K_LOCATION_NAME = "location_name"
+        const val K_TZ = "tz"
+        const val K_CITY = "city"
+        const val K_METHOD = "method"
+        const val K_ASR = "asr"
+        const val K_PRAYER_ALERTS = "prayer_alerts"
     }
 }
 

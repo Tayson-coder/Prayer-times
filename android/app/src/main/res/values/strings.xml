@@ -54,8 +54,54 @@
     <string name="about_source">مصدر النصوص</string>
     <string name="about_source_summary">كتاب «حصن المسلم من أذكار الكتاب والسنة» للشيخ د. سعيد بن علي بن وهف القحطاني، عن قاعدة بيانات «أذكار الصباح والمساء» المفتوحة (Seen Arabic، رخصة MIT).</string>
     <string name="about_fonts">الخطوط</string>
-    <string name="about_fonts_summary">Amiri و IBM Plex Sans Arabic (رخصة SIL المفتوحة)</string>
+    <string name="about_fonts_summary">Scheherazade New و IBM Plex Sans Arabic (رخصة SIL المفتوحة)</string>
 
+    <!-- مواقيت الصلاة -->
+    <string name="prayer_times">مواقيت الصلاة</string>
+    <string name="cat_prayer">مواقيت الصلاة</string>
+    <string name="use_gps">تحديد موقعي تلقائياً</string>
+    <string name="current_location">الموقع الحالي: %1$s</string>
+    <string name="city">اختر مدينة</string>
+    <string name="method">طريقة الحساب</string>
+    <string name="asr">حساب العصر</string>
+    <string name="prayer_alerts">تنبيه عند دخول وقت الصلاة</string>
+    <string name="prayer_alerts_summary">إشعار بصوت التنبيه في الموبايل، بدون أذان</string>
+    <string name="prayer_time_now">حان الآن وقت صلاة %1$s</string>
+    <string name="stop_prayer_alerts">إيقاف تنبيهات الصلاة</string>
+    <string name="channel_prayer">مواقيت الصلاة</string>
+    <string name="channel_prayer_desc">تنبيه عند دخول وقت كل صلاة</string>
+    <string name="next_in">بعد %1$s</string>
+    <string name="choose_city">اختر مدينتك لحساب المواقيت</string>
+    <string name="location_denied">لم يُسمح بالوصول للموقع. اختر مدينتك من القائمة.</string>
+    <string name="location_off">خدمة الموقع متوقفة. فعّلها أو اختر مدينتك.</string>
+    <string name="location_failed">تعذّر تحديد الموقع. اختر مدينتك من القائمة.</string>
+    <string name="locating">جارٍ تحديد الموقع…</string>
+    <string name="location_saved">تم حفظ الموقع</string>
+    <string name="my_location">موقعي الحالي</string>
+
+    <!-- السبحة -->
+    <string name="tasbih">السبحة</string>
+    <string name="tasbih_card_body">سبّح بأي ذكر، واضغط أو استخدم أزرار الصوت للعد</string>
+    <string name="tasbih_of_target">من %1$s</string>
+    <string name="tasbih_rounds">أتممت %1$s دورة</string>
+    <string name="tasbih_total">المجموع %1$s</string>
+    <string name="tasbih_reset_title">تصفير العداد</string>
+    <string name="tasbih_reset_body">سيبدأ عدّ هذا الذكر من الصفر. المجموع الكلي يبقى كما هو.</string>
+    <string name="tasbih_reset_yes">تصفير</string>
+    <string name="cancel">إلغاء</string>
+    <string name="t33">٣٣</string>
+    <string name="t100">١٠٠</string>
+    <string name="t1000">١٠٠٠</string>
+    <string name="tinf">بلا حد</string>
+
+    <string-array name="asr_entries">
+        <item>الجمهور (شافعي، مالكي، حنبلي)</item>
+        <item>الحنفي</item>
+    </string-array>
+    <string-array name="asr_values">
+        <item>standard</item>
+        <item>hanafi</item>
+    </string-array>
     <string-array name="dhikr_interval_entries">
         <item>كل ساعة</item>
         <item>كل ساعتين</item>
