@@ -95,11 +95,32 @@ jobs:
             } else { Write-Host "No prebuilt heimdall asset found; add heimdall.exe manually." }
           } catch { Write-Host "heimdall step skipped (add heimdall.exe manually): $_" }
 
-          # --- Zadig (installs the libusb driver for EUB 04e8:1234) — best effort ---
+          # --- Zadig (manual driver install fallback for EUB 04e8:1234) — best effort ---
           try {
             Write-Host "Downloading Zadig..."
             Invoke-WebRequest "https://zadig.akeo.ie/downloads/zadig-2.9.exe" -OutFile "$pkg/zadig-2.9.exe"
           } catch { Write-Host "Zadig step skipped (download from zadig.akeo.ie): $_" }
+
+          # --- wdi-simple.exe (libwdi): installs WinUSB drivers silently during setup ---
+          try {
+            Write-Host "Downloading wdi-simple (libwdi)..."
+            $u = Latest-Asset "pbatard/libwdi" "\.7z$|\.zip$"
+            if ($u) {
+              $ext = [System.IO.Path]::GetExtension($u)
+              Invoke-WebRequest $u -OutFile "libwdi$ext"
+              if ($ext -eq ".7z") { 7z x "libwdi$ext" -olibwdi -y | Out-Null }
+              else { Expand-Archive "libwdi$ext" -DestinationPath libwdi -Force }
+              $w = Get-ChildItem libwdi -Recurse -Filter "wdi-simple*.exe" |
+                   Where-Object { $_.Name -match "64" } | Select-Object -First 1
+              if (-not $w) { $w = Get-ChildItem libwdi -Recurse -Filter "wdi-simple*.exe" | Select-Object -First 1 }
+              if ($w) { Copy-Item $w.FullName "$pkg/wdi-simple.exe" }
+            } else { Write-Host "No libwdi asset found; auto driver install will be skipped." }
+          } catch { Write-Host "wdi-simple step skipped: $_" }
+
+          # Samsung USB driver (for normal adb/fastboot): not auto-downloaded here because it
+          # has no stable public URL. Drop SAMSUNG_USB_Driver.exe into the package to have the
+          # installer run it; otherwise Windows installs the ADB interface via Windows Update.
+          # The installer's [Run] entry is guarded by FileExists, so it is simply skipped.
 
           Write-Host "Package contents:"
           Get-ChildItem $pkg | Format-Table Name,Length

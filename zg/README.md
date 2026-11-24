@@ -50,19 +50,26 @@ Push to `main` or run the **Build ZG (Windows)** workflow manually. It builds
 The app searches for these next to `ZG.exe` (and in a `platform-tools` subfolder),
 then on `PATH`. A missing tool only disables its own feature.
 
-## Drivers (install once — cannot be bundled)
+## Drivers
 
-USB drivers must be installed on Windows separately; an app cannot install them silently.
+The installer (`ZG-Setup.exe`) can install the USB drivers **during setup** — tick
+"Install USB drivers now". This needs Administrator rights (a UAC prompt), and uses
+`wdi-simple` (from libwdi, the engine behind Zadig) to install **WinUSB** for:
 
-- **Normal / adb / fastboot:** install the **Samsung USB Driver** (or the generic
-  Google USB driver) so Windows recognises the phone.
-- **Samsung download mode (Heimdall):** use **Zadig** → *Options ▸ List All Devices*,
-  pick the Samsung download-mode device, install the **libusb-win32** driver.
-- **EUB mode (emergency recovery):** with the phone in EUB it appears as USB
-  `04E8:1234`. In **Zadig**, select that device and install the **libusb-win32**
-  (or WinUSB) driver. `zadig-2.9.exe` is included in the release package.
+- **Samsung download mode (Heimdall)** — `04E8:685D`
+- **Exynos EUB emergency mode** — `04E8:1234`
 
-> Install a Zadig driver **only** while the phone is in that specific mode.
+Notes and fallbacks:
+
+- **adb / fastboot (normal mode):** Windows 10/11 usually installs the ADB interface
+  automatically via Windows Update. For older Windows, install the **Samsung USB Driver**
+  (drop `SAMSUNG_USB_Driver.exe` next to the installer to have it run automatically).
+- The **EUB** driver binds best when the phone is already in EUB mode during install;
+  otherwise it is pre-staged and binds when the phone is connected.
+- Manual fallback: `zadig-2.9.exe` is included — in **Zadig**, *Options ▸ List All Devices*,
+  pick the device for that mode, install **WinUSB / libusb-win32**.
+
+> Install a driver **only** while the phone is in that specific mode.
 
 ## Safety notes
 
