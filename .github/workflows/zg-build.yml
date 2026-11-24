@@ -1,0 +1,131 @@
+name: Build ZG (Windows)
+
+on:
+  push:
+    branches: [ "claude/prayer-times-azan-app-d5k7vl", "main", "master" ]
+    paths: [ "zg/**", ".github/workflows/zg-build.yml" ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+defaults:
+  run:
+    working-directory: zg
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Python deps
+        run: pip install pyinstaller pyusb
+
+      - name: Build ZG.exe
+        run: pyinstaller zg.spec
+
+      - name: Assemble package folder
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          $ErrorActionPreference = "Stop"
+          $pkg = "ZG"
+          New-Item -ItemType Directory -Force -Path $pkg | Out-Null
+          Copy-Item dist/ZG.exe $pkg/
+          if (Test-Path README.md) { Copy-Item README.md $pkg/ }
+
+          $hdr = @{ Authorization = "Bearer $env:GH_TOKEN"; "User-Agent" = "zg-build" }
+          function Latest-Asset($repo, $pattern) {
+            $rel = Invoke-RestMethod "https://api.github.com/repos/$repo/releases/latest" -Headers $hdr
+            ($rel.assets | Where-Object { $_.name -match $pattern } | Select-Object -First 1).browser_download_url
+          }
+
+          # --- platform-tools: adb.exe + fastboot.exe (stable Google URL) ---
+          Write-Host "Downloading platform-tools..."
+          Invoke-WebRequest "https://dl.google.com/android/repository/platform-tools-latest-windows.zip" -OutFile pt.zip
+          Expand-Archive pt.zip -DestinationPath pt -Force
+          Copy-Item pt/platform-tools/adb.exe          $pkg/
+          Copy-Item pt/platform-tools/fastboot.exe      $pkg/
+          Copy-Item pt/platform-tools/AdbWinApi.dll     $pkg/ -ErrorAction SilentlyContinue
+          Copy-Item pt/platform-tools/AdbWinUsbApi.dll  $pkg/ -ErrorAction SilentlyContinue
+
+          # --- libusb-1.0.dll (needed by pyusb for EUB recovery) ---
+          try {
+            Write-Host "Downloading libusb..."
+            $u = Latest-Asset "libusb/libusb" "\.7z$"
+            Invoke-WebRequest $u -OutFile libusb.7z
+            7z x libusb.7z -olibusb -y | Out-Null
+            $dll = Get-ChildItem -Path libusb -Recurse -Filter "libusb-1.0.dll" |
+                   Where-Object { $_.FullName -match "MinGW64" } | Select-Object -First 1
+            if (-not $dll) { $dll = Get-ChildItem -Path libusb -Recurse -Filter "libusb-1.0.dll" | Select-Object -First 1 }
+            if ($dll) { Copy-Item $dll.FullName $pkg/ }
+          } catch { Write-Host "libusb step skipped: $_" }
+
+          # --- scrcpy (screen mirroring) ---
+          try {
+            Write-Host "Downloading scrcpy..."
+            $u = Latest-Asset "Genymobile/scrcpy" "win64.*\.zip$"
+            Invoke-WebRequest $u -OutFile scrcpy.zip
+            Expand-Archive scrcpy.zip -DestinationPath scrcpyx -Force
+            $sdir = (Get-ChildItem scrcpyx -Directory | Select-Object -First 1).FullName
+            if (-not $sdir) { $sdir = "scrcpyx" }
+            New-Item -ItemType Directory -Force -Path "$pkg/scrcpy" | Out-Null
+            Copy-Item "$sdir/*" "$pkg/scrcpy/" -Recurse -Force
+            Copy-Item "$pkg/scrcpy/scrcpy.exe" "$pkg/" -ErrorAction SilentlyContinue
+          } catch { Write-Host "scrcpy step skipped: $_" }
+
+          # --- heimdall (Samsung download-mode flashing) — best effort ---
+          try {
+            Write-Host "Downloading heimdall..."
+            $u = Latest-Asset "Benjamin-Dobell/Heimdall" "[Ww]in.*\.zip$"
+            if ($u) {
+              Invoke-WebRequest $u -OutFile heimdall.zip
+              Expand-Archive heimdall.zip -DestinationPath heim -Force
+              $h = Get-ChildItem heim -Recurse -Filter "heimdall.exe" | Select-Object -First 1
+              if ($h) {
+                Copy-Item (Split-Path $h.FullName) "$pkg/heimdall" -Recurse -Force
+                Copy-Item $h.FullName "$pkg/"
+              }
+            } else { Write-Host "No prebuilt heimdall asset found; add heimdall.exe manually." }
+          } catch { Write-Host "heimdall step skipped (add heimdall.exe manually): $_" }
+
+          # --- Zadig (installs the libusb driver for EUB 04e8:1234) — best effort ---
+          try {
+            Write-Host "Downloading Zadig..."
+            Invoke-WebRequest "https://zadig.akeo.ie/downloads/zadig-2.9.exe" -OutFile "$pkg/zadig-2.9.exe"
+          } catch { Write-Host "Zadig step skipped (download from zadig.akeo.ie): $_" }
+
+          Write-Host "Package contents:"
+          Get-ChildItem $pkg | Format-Table Name,Length
+          Compress-Archive -Path "$pkg/*" -DestinationPath ZG-windows.zip -Force
+
+      - name: Build single installer (ZG-Setup.exe)
+        shell: pwsh
+        run: |
+          choco install innosetup --no-progress -y
+          & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" installer.iss
+          Get-ChildItem Output
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ZG-windows
+          path: |
+            zg/Output/ZG-Setup.exe
+            zg/ZG-windows.zip
+
+      - name: Publish/refresh "latest" release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: zg-latest
+          name: ZG latest build
+          files: |
+            zg/Output/ZG-Setup.exe
+            zg/ZG-windows.zip
+          prerelease: true
