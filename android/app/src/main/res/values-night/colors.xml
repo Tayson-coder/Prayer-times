@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="parchment_top">#231A12</color>
+    <color name="parchment_bottom">#17110B</color>
+    <color name="pattern">#E7CFA6</color>
+    <color name="ink">#F1E4CC</color>
+    <color name="muted">#BFA584</color>
+    <color name="accent">#E3A35E</color>
+    <color name="line">#5B4630</color>
+    <color name="card">#2A2017</color>
+    <color name="card_stroke">#5B4630</color>
+    <color name="control">#D9C2A0</color>
+    <color name="bead">#9A7650</color>
+    <color name="bead_light">#D9B88C</color>
+    <color name="bead_marker">#E3A35E</color>
+    <color name="on_accent">#1C140D</color>
+    <color name="accent_soft">#4A3420</color>
+</resources>

@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+build/
+dist/
+dist_pkg/
+*.spec.bak
+# bundled third-party tools (fetched at build time, not committed)
+bin/
+tools/
+*.zip
+*.7z
